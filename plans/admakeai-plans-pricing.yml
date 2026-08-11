@@ -1,0 +1,62 @@
+generated: '2026-08-11'
+method: searched
+source: https://admakeai.com/llms.txt (probed 2026-08-11, HTTP 200)
+docs: https://admakeai.com/pricing
+note: >-
+  Read from the provider's own /llms.txt, which states plan names, prices and credit allowances verbatim. The human
+  pricing page at https://admakeai.com/pricing could NOT be read — it returns HTTP 403 behind a Cloudflare managed
+  challenge to every non-browser client — so annual pricing, overage/top-up terms and per-plan feature limits are
+  unknown rather than absent. Pricing is credit-metered: plans buy a monthly credit pool that both the REST API and
+  the MCP server draw from.
+currency: USD
+billing_period: monthly
+plan_count: 4
+plans:
+  - name: Free
+    price: 0
+    currency: USD
+    period: monthly
+    included_credits: 12
+    credit_grant: one-time on signup
+    card_required: false
+    limits:
+      daily_generation_cap: true
+      daily_generation_cap_value: null
+      daily_generation_cap_error: 'FORBIDDEN: daily limit reached'
+    note: 12 free credits, no credit card required. The numeric value of the daily generation cap is not published.
+  - name: Starter
+    price: 39
+    currency: USD
+    period: monthly
+    included_credits: 500
+  - name: Professional
+    price: 79
+    currency: USD
+    period: monthly
+    included_credits: 1500
+  - name: Business
+    price: 139
+    currency: USD
+    period: monthly
+    included_credits: 4000
+metering:
+  unit: credit
+  costs:
+    - item: standard ad image (low quality)
+      credits: 2
+    - item: ad image (high quality)
+      credits: 5
+    - item: batch ad set generation
+      credits: count x per-generation cost
+      example: 10 high-quality images = 50 credits
+    - item: read-only tools (list / get / analytics)
+      credits: 0
+  balance_tools: [user__getCredits, user__me]
+  source: https://admakeai.com/llms.txt; skills/admakeai-api.md
+  note: >-
+    skills/admakeai-api.md prices a high-quality image at 5 credits while the live tool schema also offers a third
+    quality tier, "ultra", whose credit cost is not published anywhere.
+overage: null
+annual_pricing: null
+cancellation: cancel anytime
+signup: https://admakeai.com/register

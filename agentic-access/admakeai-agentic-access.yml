@@ -1,0 +1,421 @@
+generated: '2026-08-11'
+method: derived
+source: mcp/admakeai-mcp-tools.json (provider-labelled tool descriptions) + https://github.com/mesmerlord/admakeai-mcp README
+  scope table + https://admakeai.com/.well-known/oauth-authorization-server
+note: 'Action classes are NOT our judgement: the provider prefixes each tool description with [write] or [DANGER: live action]
+  and leaves read-only tools unprefixed. Scope assignment is derived from the provider''s published three-scope consent table
+  and is coarse — the provider publishes scope-to-capability groupings, not a per-tool scope map.'
+model:
+  token: OAuth 2.1 access token (authorization code + PKCE S256, dynamic client registration) or an account API key in x-api-key
+  scope_filtering: 'Enforced at tools/list, not only at call time: a connection approved without mcp:publish never sees the
+    pause/resume tools.'
+  escalation: Re-consent through the OAuth authorization endpoint for a wider scope; grants are listed and revocable from
+    the dashboard Integrations section.
+  human_confirmation: 'Provider instructs agents to confirm with the user before any [DANGER: live action] tool. Delete is
+    never exposed on AdMakeAI or Meta resources — pause/revoke/unpublish only.'
+  not_exposed:
+  - project creation (deliberately withheld so an assistant cannot mint duplicate brand projects and spend credits into the
+    wrong one)
+  - delete on any AdMakeAI or Meta resource
+  fail_closed:
+  - zernioAnalytics__pauseAd
+  - zernioAnalytics__resumeAd
+  - zernioAnalytics__pauseCampaign
+  - zernioAnalytics__resumeCampaign
+  - zernioAnalytics__pauseAdSet
+  - zernioAnalytics__resumeAdSet
+summary:
+  read: 40
+  write: 16
+  dangerous: 9
+operations:
+- tool: user__me
+  action_class: read
+  consequence: none
+  scope: mcp:read
+  confirmation_required: false
+  source_label: provider-published
+- tool: user__getCredits
+  action_class: read
+  consequence: none
+  scope: mcp:read
+  confirmation_required: false
+  source_label: provider-published
+- tool: adResearch__listProjects
+  action_class: read
+  consequence: none
+  scope: mcp:read
+  confirmation_required: false
+  source_label: provider-published
+- tool: adResearch__getProject
+  action_class: read
+  consequence: none
+  scope: mcp:read
+  confirmation_required: false
+  source_label: provider-published
+- tool: adResearch__pollStatus
+  action_class: read
+  consequence: none
+  scope: mcp:read
+  confirmation_required: false
+  source_label: provider-published
+- tool: project__updateBrief
+  action_class: write
+  consequence: spends account credits and creates records inside AdMakeAI
+  scope: mcp:write
+  confirmation_required: false
+  source_label: provider-published
+- tool: project__getAssets
+  action_class: read
+  consequence: none
+  scope: mcp:read
+  confirmation_required: false
+  source_label: provider-published
+- tool: upload__uploadImageBase64
+  action_class: write
+  consequence: spends account credits and creates records inside AdMakeAI
+  scope: mcp:write
+  confirmation_required: false
+  source_label: provider-published
+- tool: upload__getUserImages
+  action_class: read
+  consequence: none
+  scope: mcp:read
+  confirmation_required: false
+  source_label: provider-published
+- tool: adGeneration__create
+  action_class: write
+  consequence: spends account credits and creates records inside AdMakeAI
+  scope: mcp:write
+  confirmation_required: false
+  source_label: provider-published
+- tool: adGeneration__generateImage
+  action_class: write
+  consequence: spends account credits and creates records inside AdMakeAI
+  scope: mcp:write
+  confirmation_required: false
+  source_label: provider-published
+- tool: adGeneration__edit
+  action_class: write
+  consequence: spends account credits and creates records inside AdMakeAI
+  scope: mcp:write
+  confirmation_required: false
+  source_label: provider-published
+- tool: adGeneration__getById
+  action_class: read
+  consequence: none
+  scope: mcp:read
+  confirmation_required: false
+  source_label: provider-published
+- tool: adGeneration__list
+  action_class: read
+  consequence: none
+  scope: mcp:read
+  confirmation_required: false
+  source_label: provider-published
+- tool: adGeneration__getRecent
+  action_class: read
+  consequence: none
+  scope: mcp:read
+  confirmation_required: false
+  source_label: provider-published
+- tool: adGeneration__searchAll
+  action_class: read
+  consequence: none
+  scope: mcp:read
+  confirmation_required: false
+  source_label: provider-published
+- tool: adGeneration__listPending
+  action_class: read
+  consequence: none
+  scope: mcp:read
+  confirmation_required: false
+  source_label: provider-published
+- tool: adGeneration__toggleFavorite
+  action_class: write
+  consequence: spends account credits and creates records inside AdMakeAI
+  scope: mcp:write
+  confirmation_required: false
+  source_label: provider-published
+- tool: adCopyGeneration__generate
+  action_class: write
+  consequence: spends account credits and creates records inside AdMakeAI
+  scope: mcp:write
+  confirmation_required: false
+  source_label: provider-published
+- tool: adCopyGeneration__getMessagingStyles
+  action_class: read
+  consequence: none
+  scope: mcp:read
+  confirmation_required: false
+  source_label: provider-published
+- tool: adSet__list
+  action_class: read
+  consequence: none
+  scope: mcp:read
+  confirmation_required: false
+  source_label: provider-published
+- tool: adSet__get
+  action_class: read
+  consequence: none
+  scope: mcp:read
+  confirmation_required: false
+  source_label: provider-published
+- tool: adSet__create
+  action_class: write
+  consequence: spends account credits and creates records inside AdMakeAI
+  scope: mcp:write
+  confirmation_required: false
+  source_label: provider-published
+- tool: adSet__update
+  action_class: write
+  consequence: spends account credits and creates records inside AdMakeAI
+  scope: mcp:write
+  confirmation_required: false
+  source_label: provider-published
+- tool: adSet__getGenerations
+  action_class: read
+  consequence: none
+  scope: mcp:read
+  confirmation_required: false
+  source_label: provider-published
+- tool: adSet__generateBatch
+  action_class: write
+  consequence: spends account credits and creates records inside AdMakeAI
+  scope: mcp:write
+  confirmation_required: false
+  source_label: provider-published
+- tool: adSet__suggestDirections
+  action_class: write
+  consequence: spends account credits and creates records inside AdMakeAI
+  scope: mcp:write
+  confirmation_required: false
+  source_label: provider-published
+- tool: videoGeneration__start
+  action_class: write
+  consequence: spends account credits and creates records inside AdMakeAI
+  scope: mcp:write
+  confirmation_required: false
+  source_label: provider-published
+- tool: videoGeneration__getStatus
+  action_class: read
+  consequence: none
+  scope: mcp:read
+  confirmation_required: false
+  source_label: provider-published
+- tool: videoGeneration__list
+  action_class: read
+  consequence: none
+  scope: mcp:read
+  confirmation_required: false
+  source_label: provider-published
+- tool: videoGeneration__listPending
+  action_class: read
+  consequence: none
+  scope: mcp:read
+  confirmation_required: false
+  source_label: provider-published
+- tool: adResearch__searchCompanies
+  action_class: read
+  consequence: none
+  scope: mcp:read
+  confirmation_required: false
+  source_label: provider-published
+- tool: adResearch__getCompanyAds
+  action_class: read
+  consequence: none
+  scope: mcp:read
+  confirmation_required: false
+  source_label: provider-published
+- tool: adResearch__addCompetitors
+  action_class: write
+  consequence: spends account credits and creates records inside AdMakeAI
+  scope: mcp:write
+  confirmation_required: false
+  source_label: provider-published
+- tool: adResearch__scrapeCompetitor
+  action_class: write
+  consequence: spends account credits and creates records inside AdMakeAI
+  scope: mcp:write
+  confirmation_required: false
+  source_label: provider-published
+- tool: adResearch__getCompetitorPreview
+  action_class: read
+  consequence: none
+  scope: mcp:read
+  confirmation_required: false
+  source_label: provider-published
+- tool: adResearch__getScrapedAds
+  action_class: read
+  consequence: none
+  scope: mcp:read
+  confirmation_required: false
+  source_label: provider-published
+- tool: adResearch__getAdDetails
+  action_class: read
+  consequence: none
+  scope: mcp:read
+  confirmation_required: false
+  source_label: provider-published
+- tool: adResearch__saveInspiration
+  action_class: write
+  consequence: spends account credits and creates records inside AdMakeAI
+  scope: mcp:write
+  confirmation_required: false
+  source_label: provider-published
+- tool: adResearch__getSavedInspirations
+  action_class: read
+  consequence: none
+  scope: mcp:read
+  confirmation_required: false
+  source_label: provider-published
+- tool: facebookConnection__list
+  action_class: read
+  consequence: none
+  scope: mcp:read
+  confirmation_required: false
+  source_label: provider-published
+- tool: facebookUpload__getCampaigns
+  action_class: read
+  consequence: none
+  scope: mcp:read
+  confirmation_required: false
+  source_label: provider-published
+- tool: facebookUpload__getAdSets
+  action_class: read
+  consequence: none
+  scope: mcp:read
+  confirmation_required: false
+  source_label: provider-published
+- tool: facebookUpload__runPreflight
+  action_class: write
+  consequence: spends account credits and creates records inside AdMakeAI
+  scope: mcp:write
+  confirmation_required: false
+  source_label: provider-published
+- tool: facebookUpload__request
+  action_class: dangerous
+  consequence: creates or changes real assets in the user's Meta (Facebook/Instagram) ad account
+  scope: mcp:publish
+  confirmation_required: true
+  source_label: provider-published
+- tool: facebookUpload__list
+  action_class: read
+  consequence: none
+  scope: mcp:read
+  confirmation_required: false
+  source_label: provider-published
+- tool: facebookUpload__get
+  action_class: read
+  consequence: none
+  scope: mcp:read
+  confirmation_required: false
+  source_label: provider-published
+- tool: facebookCampaignDraft__sourceAssets
+  action_class: read
+  consequence: none
+  scope: mcp:read
+  confirmation_required: false
+  source_label: provider-published
+- tool: facebookCampaignDraft__getAgentDraft
+  action_class: read
+  consequence: none
+  scope: mcp:read
+  confirmation_required: false
+  source_label: provider-published
+- tool: facebookCampaignDraft__pushAgentDraft
+  action_class: dangerous
+  consequence: creates or changes real assets in the user's Meta (Facebook/Instagram) ad account
+  scope: mcp:publish
+  confirmation_required: true
+  source_label: provider-published
+- tool: facebookCampaignDraft__pushDraftCampaign
+  action_class: dangerous
+  consequence: creates or changes real assets in the user's Meta (Facebook/Instagram) ad account
+  scope: mcp:publish
+  confirmation_required: true
+  source_label: provider-published
+- tool: zernioAnalytics__accountOverview
+  action_class: read
+  consequence: none
+  scope: mcp:read
+  confirmation_required: false
+  source_label: provider-published
+- tool: zernioAnalytics__tree
+  action_class: read
+  consequence: none
+  scope: mcp:read
+  confirmation_required: false
+  source_label: provider-published
+- tool: zernioAnalytics__timeline
+  action_class: read
+  consequence: none
+  scope: mcp:read
+  confirmation_required: false
+  source_label: provider-published
+- tool: zernioAnalytics__listCampaigns
+  action_class: read
+  consequence: none
+  scope: mcp:read
+  confirmation_required: false
+  source_label: provider-published
+- tool: zernioAnalytics__listAds
+  action_class: read
+  consequence: none
+  scope: mcp:read
+  confirmation_required: false
+  source_label: provider-published
+- tool: zernioAnalytics__getAd
+  action_class: read
+  consequence: none
+  scope: mcp:read
+  confirmation_required: false
+  source_label: provider-published
+- tool: zernioAnalytics__getAdAnalytics
+  action_class: read
+  consequence: none
+  scope: mcp:read
+  confirmation_required: false
+  source_label: provider-published
+- tool: zernioAnalytics__getAdComments
+  action_class: read
+  consequence: none
+  scope: mcp:read
+  confirmation_required: false
+  source_label: provider-published
+- tool: zernioAnalytics__pauseAd
+  action_class: dangerous
+  consequence: creates or changes real assets in the user's Meta (Facebook/Instagram) ad account
+  scope: mcp:publish
+  confirmation_required: true
+  source_label: provider-published
+- tool: zernioAnalytics__resumeAd
+  action_class: dangerous
+  consequence: creates or changes real assets in the user's Meta (Facebook/Instagram) ad account
+  scope: mcp:publish
+  confirmation_required: true
+  source_label: provider-published
+- tool: zernioAnalytics__pauseCampaign
+  action_class: dangerous
+  consequence: creates or changes real assets in the user's Meta (Facebook/Instagram) ad account
+  scope: mcp:publish
+  confirmation_required: true
+  source_label: provider-published
+- tool: zernioAnalytics__resumeCampaign
+  action_class: dangerous
+  consequence: creates or changes real assets in the user's Meta (Facebook/Instagram) ad account
+  scope: mcp:publish
+  confirmation_required: true
+  source_label: provider-published
+- tool: zernioAnalytics__pauseAdSet
+  action_class: dangerous
+  consequence: creates or changes real assets in the user's Meta (Facebook/Instagram) ad account
+  scope: mcp:publish
+  confirmation_required: true
+  source_label: provider-published
+- tool: zernioAnalytics__resumeAdSet
+  action_class: dangerous
+  consequence: creates or changes real assets in the user's Meta (Facebook/Instagram) ad account
+  scope: mcp:publish
+  confirmation_required: true
+  source_label: provider-published

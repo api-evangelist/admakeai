@@ -1,0 +1,56 @@
+generated: '2026-08-11'
+method: searched
+source: skills/admakeai-api.md (provider-published SKILL.md); https://github.com/mesmerlord/admakeai-mcp README;
+  live probe of https://admakeai.com/api/mcp
+docs: https://admakeai.com/api/docs
+format: trpc
+rfc9457: false
+note: >-
+  AdMakeAI publishes no error reference page and no OpenAPI to derive 4xx/5xx responses from. The codes below are the
+  ones the provider names explicitly in its own agent-facing documents. This is a thin catalog by the provider's
+  doing, not by ours: an agent has no enumerated failure vocabulary to route on, only the four strings below.
+envelope:
+  success: '{ ok, tool, data }'
+  errors: tRPC error codes (uppercase string codes, e.g. FORBIDDEN), not application/problem+json
+errors:
+  - code: FORBIDDEN
+    message: 'daily limit reached'
+    status: null
+    cause: Free-plan daily generation cap exhausted.
+    remediation: Upgrade at https://admakeai.com/pricing
+    applies_to: [adGeneration__create, adGeneration__generateImage, adGeneration__edit, adSet__generateBatch, videoGeneration__start]
+    source: skills/admakeai-api.md
+  - code: FORBIDDEN
+    message: 'You already have 5 active API keys'
+    status: null
+    cause: Account is at the five-active-key ceiling.
+    remediation: Revoke a key at https://admakeai.com/dashboard/integrations/api
+    source: skills/admakeai-api.md
+  - code: UNAUTHORIZED
+    status: 401
+    cause: Unauthenticated call to the MCP endpoint.
+    behaviour: >-
+      The provider documents that the MCP server answers 401 with a WWW-Authenticate challenge carrying a
+      resource_metadata pointer (RFC 9728), which is how MCP clients bootstrap the OAuth flow.
+    remediation: Complete the OAuth authorization-code + PKCE flow, or send x-api-key.
+    source: https://github.com/mesmerlord/admakeai-mcp
+    note: Not independently observable — an anonymous POST is intercepted at HTTP 403 by Cloudflare first.
+  - code: DISABLED
+    message: 'Meta status changes fail closed'
+    status: null
+    cause: >-
+      The six zernioAnalytics pause/resume tools are registered and advertised but currently disabled server-side.
+    remediation: Change ad status in Meta Ads Manager.
+    applies_to: [zernioAnalytics__pauseAd, zernioAnalytics__resumeAd, zernioAnalytics__pauseCampaign, zernioAnalytics__resumeCampaign,
+      zernioAnalytics__pauseAdSet, zernioAnalytics__resumeAdSet]
+    source: https://admakeai.com/.well-known/mcp.json
+    note: The error code string is not published; only the fail-closed behaviour is.
+empty_state_conditions:
+  - condition: facebookConnection__list returns empty
+    cause: The user has not connected a Facebook account.
+    remediation: https://admakeai.com/dashboard/integrations/facebook
+    source: skills/admakeai-api.md
+gaps:
+  - No enumerated error code list is published.
+  - No HTTP status codes are documented for any failure.
+  - No machine-readable error schema (no problem+json, no error catalog endpoint).

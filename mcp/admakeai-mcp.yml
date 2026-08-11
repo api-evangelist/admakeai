@@ -1,0 +1,941 @@
+generated: '2026-08-11'
+method: searched
+source: https://admakeai.com/.well-known/mcp.json; https://github.com/mesmerlord/admakeai-mcp (lhm.plugin.json, 65 tools with
+  inputSchema); https://registry.modelcontextprotocol.io/v0/servers?search=admakeai
+status: published
+server:
+  name: admakeai
+  title: AdMake AI - AI Ad Creative Platform
+  version: 1.0.0
+  transport: streamable-http
+  url: https://admakeai.com/api/mcp
+  documentation: https://admakeai.com/api/docs
+  landing: https://admakeai.com/agents
+  connect_guides: https://admakeai.com/connect
+  server_card: https://admakeai.com/.well-known/mcp.json
+  capabilities:
+    tools: true
+    resources: false
+    prompts: false
+registry:
+  name: com.admakeai/admakeai
+  source: https://registry.modelcontextprotocol.io/v0/servers?search=admakeai
+  status: active
+  published_at: '2026-08-11T12:50:15Z'
+  is_latest: true
+  probed: '2026-08-11'
+authentication:
+  primary: oauth2
+  alternatives:
+  - apiKey
+  oauth:
+    authorization_server_metadata: https://admakeai.com/.well-known/oauth-authorization-server
+    protected_resource_metadata: https://admakeai.com/.well-known/oauth-protected-resource/api/mcp
+    dynamic_client_registration: true
+    code_challenge_methods:
+    - S256
+    scopes:
+    - mcp:read
+    - mcp:write
+    - mcp:publish
+    - offline_access
+    scope_filtering_at_tools_list: true
+  api_key:
+    header: x-api-key
+    alternative_header: 'Authorization: Bearer <key>'
+    issued_at: https://admakeai.com/dashboard/integrations/api
+    max_active_keys: 5
+  artifact: authentication/admakeai-authentication.yml
+naming:
+  convention: tRPC procedure path with "." replaced by "__"
+  example: adGeneration.create -> adGeneration__create
+  rest_equivalent: https://admakeai.com/api/v1/<procedure.path>
+tool_count: 65
+tool_counts_by_kind:
+  read: 40
+  write: 16
+  dangerous: 9
+x-findings:
+- finding: tool-count-divergence
+  detail: Three published numbers disagree. The MCP server card at /.well-known/mcp.json enumerates 38 tools; the first-party
+    plugin manifest (lhm.plugin.json) and the admakeai-mcp README both say 65; the apis.io submission said 59. The 65-tool
+    manifest is the only one carrying inputSchema, so it is treated as authoritative here.
+  missing_from_server_card:
+  - adResearch__getProject
+  - adResearch__pollStatus
+  - project__updateBrief
+  - project__getAssets
+  - adGeneration__generateImage
+  - adGeneration__edit
+  - adGeneration__toggleFavorite
+  - adCopyGeneration__generate
+  - adCopyGeneration__getMessagingStyles
+  - adSet__create
+  - adSet__update
+  - adSet__suggestDirections
+  - videoGeneration__start
+  - videoGeneration__getStatus
+  - videoGeneration__list
+  - videoGeneration__listPending
+  - adResearch__searchCompanies
+  - adResearch__getCompanyAds
+  - adResearch__addCompetitors
+  - adResearch__scrapeCompetitor
+  - adResearch__getCompetitorPreview
+  - adResearch__getScrapedAds
+  - adResearch__getAdDetails
+  - adResearch__saveInspiration
+  - adResearch__getSavedInspirations
+  - zernioAnalytics__accountOverview
+  - zernioAnalytics__getAdComments
+- finding: live-tools-list-unreadable-anonymously
+  detail: 'POST tools/list to https://admakeai.com/api/mcp returns HTTP 403 with a Cloudflare managed challenge (cf-mitigated:
+    challenge), not an MCP 401/WWW-Authenticate. The live schema could not be introspected anonymously; the tool set below
+    is read from the provider-published manifest instead.'
+  probed: '2026-08-11'
+  http_status: 403
+- finding: skill-repo-link-404
+  detail: Both /llms.txt and /.well-known/mcp.json point agents at https://github.com/admakeai/agent-skills, which returns
+    404 (the admakeai GitHub org does not exist). The real repositories live under the personal account github.com/mesmerlord.
+  probed: '2026-08-11'
+  http_status: 404
+- finding: disabled-but-registered-tools
+  detail: The six zernioAnalytics pause/resume tools are registered and described but fail closed; the provider directs status
+    changes to Meta Ads Manager.
+tools:
+- name: user__me
+  group: Account & credits
+  kind: read
+  description: Get the authenticated user's profile, plan, and credit balance.
+  rest: https://admakeai.com/api/v1/user.me
+  in_server_card: true
+- name: user__getCredits
+  group: Account & credits
+  kind: read
+  description: Get the authenticated user's current credit balance only.
+  rest: https://admakeai.com/api/v1/user.getCredits
+  in_server_card: true
+- name: adResearch__listProjects
+  group: Projects & competitor research
+  kind: read
+  description: 'List the user''s projects (brands). ALWAYS call this before generating anything: every generation needs a
+    projectId, and the project''s brand brief is what the render is built from. Pick the project the user''s request is about;
+    if more than one could fit, ask which. Projects cannot be created through this API — if the user has none, tell them to
+    set one up at https://admakeai.com/dashboard.'
+  rest: https://admakeai.com/api/v1/adResearch.listProjects
+  in_server_card: true
+  input_properties:
+  - cursor
+  - limit
+- name: adResearch__getProject
+  group: Projects & competitor research
+  kind: read
+  description: Get one project with its full brand brief, competitors, research jobs, and scraped-ad counts. Read this before
+    generating so the creative matches the brand.
+  rest: https://admakeai.com/api/v1/adResearch.getProject
+  in_server_card: false
+  input_properties:
+  - id
+  required:
+  - id
+- name: adResearch__pollStatus
+  group: Projects & competitor research
+  kind: read
+  description: 'Poll a project''s research status: pipeline stage, running scrape jobs, competitor and saved-ad counts.'
+  rest: https://admakeai.com/api/v1/adResearch.pollStatus
+  in_server_card: false
+  input_properties:
+  - id
+  required:
+  - id
+- name: project__updateBrief
+  group: Projects
+  kind: write
+  description: Update a project's brand brief (product summary, target audience, value proposition, industry, keywords). Sharpening
+    the brief improves every later generation.
+  rest: https://admakeai.com/api/v1/project.updateBrief
+  in_server_card: false
+  input_properties:
+  - industry
+  - keywords
+  - productSummary
+  - projectId
+  - targetAudience
+  - valueProposition
+  required:
+  - projectId
+- name: project__getAssets
+  group: Projects
+  kind: read
+  description: List a project's stored assets (product photos, logos) with their URLs, for use as reference images.
+  rest: https://admakeai.com/api/v1/project.getAssets
+  in_server_card: false
+  input_properties:
+  - projectId
+  required:
+  - projectId
+- name: upload__uploadImageBase64
+  group: Source image uploads
+  kind: write
+  description: Upload a JPEG, PNG, or WebP image from base64 bytes into AdMakeAI storage. Returns an image ID and public URL
+    for image generation or Facebook campaign drafts.
+  rest: https://admakeai.com/api/v1/upload.uploadImageBase64
+  in_server_card: true
+  input_properties:
+  - base64Data
+  - contentType
+  - filename
+  - imageHash
+  - turnstileToken
+  required:
+  - base64Data
+- name: upload__getUserImages
+  group: Source image uploads
+  kind: read
+  description: List the user's previously uploaded source images, newest first, with pagination.
+  rest: https://admakeai.com/api/v1/upload.getUserImages
+  in_server_card: true
+  input_properties:
+  - cursor
+  - limit
+- name: adGeneration__create
+  group: Ad image generation
+  kind: write
+  description: 'Queue a FINISHED AD image render. Required: projectId. Call adResearch.listProjects first and pick the project
+    the request is about, or ask the user when it is ambiguous; never guess an id. Also required: prompt, a creative brief
+    rather than a finished image prompt. How the prompt is used: a creative-director model rewrites it into the real image
+    prompt using the project''s brand brief, and that rewrite always adds a specific headline, a subline, a CTA button, and
+    the project logo when the project has one. Negative instructions in the prompt (''no text'', ''no logo'', ''nothing but
+    the product'') cannot suppress those; use adGeneration.generateImage when the caller wants exact or no text. Optional:
+    adType, aspectRatio, quality (low/high/ultra), referenceImageUrls, inputImageId (from upload.uploadImageBase64), referenceAdId
+    or referenceInspirationId to remix an existing ad. Costs credits. Returns a generation ID. Poll adGeneration.getById until
+    status is COMPLETED.'
+  rest: https://admakeai.com/api/v1/adGeneration.create
+  in_server_card: true
+  input_properties:
+  - adSetId
+  - adType
+  - aspectRatio
+  - inputImageId
+  - projectId
+  - prompt
+  - quality
+  - referenceAdId
+  - referenceImageUrls
+  - referenceInspirationId
+  required:
+  - projectId
+  - prompt
+- name: adGeneration__generateImage
+  group: Ad image generation
+  kind: write
+  description: 'Queue an image render from a VERBATIM prompt. The prompt goes to the image model exactly as written: no creative-director
+    rewrite, no brand brief, no added headline, subline or CTA, and no project logo. The image contains only what the prompt
+    stipulates. Use this when the caller wants only specific stipulated text, forbids text/logos/CTAs, or wants raw scene,
+    product, or photography imagery rather than a finished ad; use adGeneration.create for finished ads. Required: projectId
+    (credit scoping only, nothing from it enters the prompt) and prompt. Optional: aspectRatio, quality (low/high/ultra),
+    referenceImageUrls and inputImageId for image-to-image. Costs the same credits as adGeneration.create. Returns a generation
+    ID. Poll adGeneration.getById until status is COMPLETED.'
+  rest: https://admakeai.com/api/v1/adGeneration.generateImage
+  in_server_card: false
+  input_properties:
+  - aspectRatio
+  - inputImageId
+  - projectId
+  - prompt
+  - quality
+  - referenceImageUrls
+  required:
+  - projectId
+  - prompt
+- name: adGeneration__edit
+  group: Ad image generation
+  kind: write
+  description: 'Queue an image-to-image edit and return immediately. The universal edit tool: change background, restyle,
+    swap a subject, change aspect ratio, add brand assets, or remix a competitor ad. Source is either sourceAdId (one of the
+    user''s own generations) or sourceImageUrl (any direct image URL). Costs credits. Poll adGeneration.getById until COMPLETED.'
+  rest: https://admakeai.com/api/v1/adGeneration.edit
+  in_server_card: false
+  input_properties:
+  - aspectRatio
+  - editInstructions
+  - projectId
+  - quality
+  - sourceAdId
+  - sourceImageUrl
+  required:
+  - editInstructions
+- name: adGeneration__getById
+  group: Ad image generation
+  kind: read
+  description: Get the status, prompt, and resulting image URLs of a single ad generation by ID. Use to poll until status
+    is COMPLETED.
+  rest: https://admakeai.com/api/v1/adGeneration.getById
+  in_server_card: true
+  input_properties:
+  - id
+  required:
+  - id
+- name: adGeneration__list
+  group: Ad image generation
+  kind: read
+  description: Paginated list of the user's ad generations, newest first.
+  rest: https://admakeai.com/api/v1/adGeneration.list
+  in_server_card: true
+  input_properties:
+  - cursor
+  - limit
+- name: adGeneration__getRecent
+  group: Ad image generation
+  kind: read
+  description: Get the user's most recent ad generations (default limit 12).
+  rest: https://admakeai.com/api/v1/adGeneration.getRecent
+  in_server_card: true
+  input_properties:
+  - limit
+- name: adGeneration__searchAll
+  group: Ad image generation
+  kind: read
+  description: Full-text search across the user's ad generations by prompt.
+  rest: https://admakeai.com/api/v1/adGeneration.searchAll
+  in_server_card: true
+  input_properties:
+  - cursor
+  - filter
+  - limit
+  - query
+- name: adGeneration__listPending
+  group: Ad image generation
+  kind: read
+  description: List the user's currently-pending ad generations.
+  rest: https://admakeai.com/api/v1/adGeneration.listPending
+  in_server_card: true
+- name: adGeneration__toggleFavorite
+  group: Ad image generation
+  kind: write
+  description: Star or unstar one of the user's ad generations. Free — use it to mark the winner of a batch.
+  rest: https://admakeai.com/api/v1/adGeneration.toggleFavorite
+  in_server_card: false
+  input_properties:
+  - id
+  required:
+  - id
+- name: adCopyGeneration__generate
+  group: Ad copy generation
+  kind: write
+  description: 'Write Facebook/Instagram ad copy for an ad image URL: headline, primary text, description, CTA, and hook angle.
+    Returns up to 5 variations. Pass projectId so the copy uses the brand brief. Call this right after a generation completes.'
+  rest: https://admakeai.com/api/v1/adCopyGeneration.generate
+  in_server_card: false
+  input_properties:
+  - additionalInstructions
+  - imageUrl
+  - messagingStyle
+  - projectId
+  - variationCount
+  required:
+  - imageUrl
+- name: adCopyGeneration__getMessagingStyles
+  group: Ad copy generation
+  kind: read
+  description: List the ad-copy messaging styles (clickbait, professional, UGC, direct response, storytelling, ...) accepted
+    by adCopyGeneration.generate.
+  rest: https://admakeai.com/api/v1/adCopyGeneration.getMessagingStyles
+  in_server_card: false
+- name: adSet__list
+  group: Ad sets (batch creative)
+  kind: read
+  description: Paginated list of the user's ad sets.
+  rest: https://admakeai.com/api/v1/adSet.list
+  in_server_card: true
+  input_properties:
+  - page
+  - perPage
+- name: adSet__get
+  group: Ad sets (batch creative)
+  kind: read
+  description: Get an ad set by ID, including its general instructions.
+  rest: https://admakeai.com/api/v1/adSet.get
+  in_server_card: true
+  input_properties:
+  - id
+  required:
+  - id
+- name: adSet__create
+  group: Ad sets (batch creative)
+  kind: write
+  description: 'Create an ad set: a project + shared brief + ad type + quality + aspect ratio that many variations are generated
+    from. Free — the credits are charged by adSet.generateBatch.'
+  rest: https://admakeai.com/api/v1/adSet.create
+  in_server_card: false
+  input_properties:
+  - adCopyInstructions
+  - adCopyMessagingStyle
+  - adType
+  - additionalImageUrls
+  - aspectRatio
+  - generalInstructions
+  - name
+  - projectId
+  - quality
+  required:
+  - generalInstructions
+  - projectId
+  - adType
+- name: adSet__update
+  group: Ad sets (batch creative)
+  kind: write
+  description: Update an ad set's brief, ad type, quality, aspect ratio, or reference images before generating another batch.
+  rest: https://admakeai.com/api/v1/adSet.update
+  in_server_card: false
+  input_properties:
+  - adCopyInstructions
+  - adCopyMessagingStyle
+  - adType
+  - additionalImageUrls
+  - aspectRatio
+  - generalInstructions
+  - id
+  - name
+  - projectId
+  - quality
+  required:
+  - id
+- name: adSet__getGenerations
+  group: Ad sets (batch creative)
+  kind: read
+  description: List all ad generations belonging to an ad set.
+  rest: https://admakeai.com/api/v1/adSet.getGenerations
+  in_server_card: true
+  input_properties:
+  - adSetId
+  - filter
+  - page
+  - perPage
+  required:
+  - adSetId
+- name: adSet__generateBatch
+  group: Ad sets (batch creative)
+  kind: write
+  description: Generate a batch of ad variations from one ad set + per-variation instructions. Enqueues N background jobs
+    and returns their generation IDs.
+  rest: https://admakeai.com/api/v1/adSet.generateBatch
+  in_server_card: true
+  input_properties:
+  - adSetId
+  - count
+  - quality
+  - specificInstructions
+  required:
+  - adSetId
+- name: adSet__suggestDirections
+  group: Ad sets (batch creative)
+  kind: write
+  description: Ask the model for distinct creative directions (angles/hooks) for an ad set, to feed back in as per-variation
+    instructions.
+  rest: https://admakeai.com/api/v1/adSet.suggestDirections
+  in_server_card: false
+  input_properties:
+  - adSetId
+  required:
+  - adSetId
+- name: videoGeneration__start
+  group: UGC video ads
+  kind: write
+  description: Queue UGC-style video ad generation for a project (script, voice, and render). Costs credits per video. Poll
+    videoGeneration.getStatus.
+  rest: https://admakeai.com/api/v1/videoGeneration.start
+  in_server_card: false
+  input_properties:
+  - generateStartingFrame
+  - projectId
+  - quality
+  - referenceImageUrl
+  - startingFrameUrl
+  - userInstructions
+  - videoCount
+  required:
+  - projectId
+- name: videoGeneration__getStatus
+  group: UGC video ads
+  kind: read
+  description: Get the status and output URL of a single video generation by ID. Poll until COMPLETED.
+  rest: https://admakeai.com/api/v1/videoGeneration.getStatus
+  in_server_card: false
+  input_properties:
+  - id
+  required:
+  - id
+- name: videoGeneration__list
+  group: UGC video ads
+  kind: read
+  description: Paginated list of the user's completed UGC video ads.
+  rest: https://admakeai.com/api/v1/videoGeneration.list
+  in_server_card: false
+  input_properties:
+  - filter
+  - page
+  - perPage
+  - projectId
+  - videoSetId
+- name: videoGeneration__listPending
+  group: UGC video ads
+  kind: read
+  description: List the user's currently-rendering video generations.
+  rest: https://admakeai.com/api/v1/videoGeneration.listPending
+  in_server_card: false
+- name: adResearch__searchCompanies
+  group: Projects & competitor research
+  kind: read
+  description: Resolve a brand name to its Facebook advertiser Page (id, name, category, follower counts). Step 1 of looking
+    up any brand's live ads.
+  rest: https://admakeai.com/api/v1/adResearch.searchCompanies
+  in_server_card: false
+  input_properties:
+  - query
+  required:
+  - query
+- name: adResearch__getCompanyAds
+  group: Projects & competitor research
+  kind: read
+  description: Get the ads a Facebook Page is currently running, from the Meta Ad Library, by pageId (from adResearch.searchCompanies).
+    Works for any advertiser, not just the user's competitors.
+  rest: https://admakeai.com/api/v1/adResearch.getCompanyAds
+  in_server_card: false
+  input_properties:
+  - country
+  - cursor
+  - pageId
+  required:
+  - pageId
+- name: adResearch__addCompetitors
+  group: Projects & competitor research
+  kind: write
+  description: Add competitors to a project by name (optionally with website URL) and kick off ad scraping for them.
+  rest: https://admakeai.com/api/v1/adResearch.addCompetitors
+  in_server_card: false
+  input_properties:
+  - competitors
+  - projectId
+  - scrapeAds
+  required:
+  - projectId
+  - competitors
+- name: adResearch__scrapeCompetitor
+  group: Projects & competitor research
+  kind: write
+  description: Re-scrape one competitor's live Facebook ads into the project. Returns a research job — poll adResearch.pollStatus.
+  rest: https://admakeai.com/api/v1/adResearch.scrapeCompetitor
+  in_server_card: false
+  input_properties:
+  - competitorId
+  required:
+  - competitorId
+- name: adResearch__getCompetitorPreview
+  group: Projects & competitor research
+  kind: read
+  description: Preview the ads already scraped for a single competitor.
+  rest: https://admakeai.com/api/v1/adResearch.getCompetitorPreview
+  in_server_card: false
+  input_properties:
+  - competitorId
+  required:
+  - competitorId
+- name: adResearch__getScrapedAds
+  group: Projects & competitor research
+  kind: read
+  description: Browse the competitor ads scraped into a project, with sorting (relevance, longest_running, newest) and media-type/keyword
+    filters. This is the raw material for remixes.
+  rest: https://admakeai.com/api/v1/adResearch.getScrapedAds
+  in_server_card: false
+  input_properties:
+  - competitorId
+  - limit
+  - mediaType
+  - offset
+  - projectId
+  - search
+  - searchTerm
+  - showIrrelevant
+  - sortBy
+  required:
+  - projectId
+- name: adResearch__getAdDetails
+  group: Projects & competitor research
+  kind: read
+  description: 'Get one scraped competitor ad in full: creative URLs, ad text, headline, run dates, and platform placements.'
+  rest: https://admakeai.com/api/v1/adResearch.getAdDetails
+  in_server_card: false
+  input_properties:
+  - projectId
+  - scrapedAdId
+  required:
+  - projectId
+  - scrapedAdId
+- name: adResearch__saveInspiration
+  group: Projects & competitor research
+  kind: write
+  description: Save a scraped competitor ad to a project as inspiration. The returned inspiration ID can be passed to adGeneration.create
+    as referenceInspirationId to remix it.
+  rest: https://admakeai.com/api/v1/adResearch.saveInspiration
+  in_server_card: false
+  input_properties:
+  - action
+  - projectId
+  - scrapedAdId
+  - userNotes
+  required:
+  - scrapedAdId
+  - projectId
+- name: adResearch__getSavedInspirations
+  group: Projects & competitor research
+  kind: read
+  description: List the competitor ads saved as inspiration for a project, with their inspiration IDs.
+  rest: https://admakeai.com/api/v1/adResearch.getSavedInspirations
+  in_server_card: false
+  input_properties:
+  - limit
+  - offset
+  - projectId
+- name: facebookConnection__list
+  group: Meta connections
+  kind: read
+  description: List the user's connected Facebook ad accounts and Pages, with their cached identity info.
+  rest: https://admakeai.com/api/v1/facebookConnection.list
+  in_server_card: true
+- name: facebookUpload__getCampaigns
+  group: Meta ad upload
+  kind: read
+  description: List Meta campaigns for a specific connected ad account (cache-first; refresh from Meta if cold).
+  rest: https://admakeai.com/api/v1/facebookUpload.getCampaigns
+  in_server_card: true
+  input_properties:
+  - adAccountId
+  - refresh
+  required:
+  - adAccountId
+- name: facebookUpload__getAdSets
+  group: Meta ad upload
+  kind: read
+  description: List Meta ad sets under a given campaign.
+  rest: https://admakeai.com/api/v1/facebookUpload.getAdSets
+  in_server_card: true
+  input_properties:
+  - adAccountId
+  - fbCampaignId
+  - refresh
+  required:
+  - adAccountId
+  - fbCampaignId
+- name: facebookUpload__runPreflight
+  group: Meta ad upload
+  kind: write
+  description: Validate an ad-creative + ad-account pair for Meta upload (image dimensions, copy length, etc.) without uploading.
+  rest: https://admakeai.com/api/v1/facebookUpload.runPreflight
+  in_server_card: true
+  input_properties:
+  - adGenerationId
+  - copy
+  - declareAsAiGenerated
+  - destinationUrl
+  - targetAdSetId
+  required:
+  - adGenerationId
+  - copy
+  - destinationUrl
+  - targetAdSetId
+- name: facebookUpload__request
+  group: Meta ad upload
+  kind: dangerous
+  description: Enqueue an upload of an AdMakeAI-generated ad creative to a Meta ad account / campaign / ad set. Creates a
+    real ad on Meta. ALWAYS confirm with the user before calling. Always confirm with the user before calling.
+  rest: https://admakeai.com/api/v1/facebookUpload.request
+  in_server_card: true
+  input_properties:
+  - adGenerationId
+  - confirmedReadinessDismissals
+  - copy
+  - destinationUrl
+  - targetAdSetId
+  - targetInstagramActorId
+  - targetPageId
+  - templateOverrides
+  required:
+  - adGenerationId
+  - targetAdSetId
+  - targetPageId
+  - copy
+  - destinationUrl
+- name: facebookUpload__list
+  group: Meta ad upload
+  kind: read
+  description: List previously-uploaded ads, filterable by ad account and state.
+  rest: https://admakeai.com/api/v1/facebookUpload.list
+  in_server_card: true
+  input_properties:
+  - adAccountId
+  - adGenerationId
+  - search
+  - uploadState
+- name: facebookUpload__get
+  group: Meta ad upload
+  kind: read
+  description: Get the upload state and Meta IDs of a single uploaded ad.
+  rest: https://admakeai.com/api/v1/facebookUpload.get
+  in_server_card: true
+  input_properties:
+  - uploadedAdId
+  required:
+  - uploadedAdId
+- name: facebookCampaignDraft__sourceAssets
+  group: Meta campaign drafts
+  kind: read
+  description: Resolve previously-uploaded Meta ads into reusable creative assets for a campaign draft.
+  rest: https://admakeai.com/api/v1/facebookCampaignDraft.sourceAssets
+  in_server_card: true
+  input_properties:
+  - adAccountId
+  - connectionId
+  - platformAdIds
+  - zernioAdIds
+  required:
+  - connectionId
+  - adAccountId
+- name: facebookCampaignDraft__getAgentDraft
+  group: Meta campaign drafts
+  kind: read
+  description: Read a saved agent-created Facebook campaign draft by draft ID before pushing.
+  rest: https://admakeai.com/api/v1/facebookCampaignDraft.getAgentDraft
+  in_server_card: true
+  input_properties:
+  - draftId
+  required:
+  - draftId
+- name: facebookCampaignDraft__pushAgentDraft
+  group: Meta campaign drafts
+  kind: dangerous
+  description: Push a saved agent-created Facebook campaign draft to Meta as draft campaigns/ad sets/ads. ALWAYS confirm with
+    the user before calling. Always confirm with the user before calling.
+  rest: https://admakeai.com/api/v1/facebookCampaignDraft.pushAgentDraft
+  in_server_card: true
+  input_properties:
+  - draftId
+  required:
+  - draftId
+- name: facebookCampaignDraft__pushDraftCampaign
+  group: Meta campaign drafts
+  kind: dangerous
+  description: Create Meta draft campaigns/ad sets/ads from explicit campaign data, ad sets, ad copy, and image URLs. Supports
+    raw externally-hosted image URLs. ALWAYS confirm with the user before calling. Always confirm with the user before calling.
+  rest: https://admakeai.com/api/v1/facebookCampaignDraft.pushDraftCampaign
+  in_server_card: true
+  input_properties:
+  - adAccountId
+  - adSets
+  - campaign
+  - connectionId
+  - pageId
+  required:
+  - connectionId
+  - adAccountId
+  - campaign
+  - adSets
+- name: zernioAnalytics__accountOverview
+  group: Meta analytics & status
+  kind: read
+  description: Get total ad-account spend and performance (spend, impressions, clicks, CTR, CPC, conversions, ROAS) for a
+    date range like last_30_days or last_month, with previous-period comparison.
+  rest: https://admakeai.com/api/v1/zernioAnalytics.accountOverview
+  in_server_card: false
+  input_properties:
+  - adAccountId
+  - compareToPrevious
+  - connectionId
+  - datePreset
+  - fromDate
+  - toDate
+  required:
+  - connectionId
+- name: zernioAnalytics__tree
+  group: Meta analytics & status
+  kind: read
+  description: Get the campaign → ad-set → ad hierarchy for an ad account.
+  rest: https://admakeai.com/api/v1/zernioAnalytics.tree
+  in_server_card: true
+  input_properties:
+  - adAccountId
+  - connectionId
+  - fromDate
+  - limit
+  - page
+  - sort
+  - status
+  - toDate
+  required:
+  - connectionId
+- name: zernioAnalytics__timeline
+  group: Meta analytics & status
+  kind: read
+  description: Get time-series performance metrics for an ad account.
+  rest: https://admakeai.com/api/v1/zernioAnalytics.timeline
+  in_server_card: true
+  input_properties:
+  - adAccountId
+  - connectionId
+  - fromDate
+  - toDate
+  required:
+  - connectionId
+- name: zernioAnalytics__listCampaigns
+  group: Meta analytics & status
+  kind: read
+  description: List Meta campaigns with rolled-up performance metrics.
+  rest: https://admakeai.com/api/v1/zernioAnalytics.listCampaigns
+  in_server_card: true
+  input_properties:
+  - adAccountId
+  - connectionId
+  - fromDate
+  - limit
+  - page
+  - sort
+  - status
+  - toDate
+  required:
+  - connectionId
+- name: zernioAnalytics__listAds
+  group: Meta analytics & status
+  kind: read
+  description: List Meta ads under a campaign or ad set with performance metrics.
+  rest: https://admakeai.com/api/v1/zernioAnalytics.listAds
+  in_server_card: true
+  input_properties:
+  - adAccountId
+  - campaignId
+  - connectionId
+  - limit
+  - page
+  - sort
+  - status
+  required:
+  - connectionId
+- name: zernioAnalytics__getAd
+  group: Meta analytics & status
+  kind: read
+  description: Get a single Meta ad's metadata and creative.
+  rest: https://admakeai.com/api/v1/zernioAnalytics.getAd
+  in_server_card: true
+  input_properties:
+  - adId
+  - connectionId
+  required:
+  - connectionId
+  - adId
+- name: zernioAnalytics__getAdAnalytics
+  group: Meta analytics & status
+  kind: read
+  description: Get day-by-day analytics (spend, CTR, CPC, conversions) for a single Meta ad.
+  rest: https://admakeai.com/api/v1/zernioAnalytics.getAdAnalytics
+  in_server_card: true
+  input_properties:
+  - adId
+  - breakdowns
+  - connectionId
+  - fromDate
+  - toDate
+  required:
+  - connectionId
+  - adId
+- name: zernioAnalytics__getAdComments
+  group: Meta analytics & status
+  kind: read
+  description: List public comments on the boosted post behind a Meta ad (Facebook or Instagram placement).
+  rest: https://admakeai.com/api/v1/zernioAnalytics.getAdComments
+  in_server_card: false
+  input_properties:
+  - adId
+  - connectionId
+  - cursor
+  - limit
+  - placement
+  required:
+  - connectionId
+  - adId
+- name: zernioAnalytics__pauseAd
+  group: Meta analytics & status
+  kind: dangerous
+  description: 'Currently disabled: Meta ad status changes fail closed in AdMakeAI. Launch/pause from Meta Ads Manager. Always
+    confirm with the user before calling.'
+  rest: https://admakeai.com/api/v1/zernioAnalytics.pauseAd
+  in_server_card: true
+  input_properties:
+  - adId
+  - connectionId
+  required:
+  - connectionId
+  - adId
+- name: zernioAnalytics__resumeAd
+  group: Meta analytics & status
+  kind: dangerous
+  description: 'Currently disabled: Meta ad status changes fail closed in AdMakeAI. Launch/resume from Meta Ads Manager. Always
+    confirm with the user before calling.'
+  rest: https://admakeai.com/api/v1/zernioAnalytics.resumeAd
+  in_server_card: true
+  input_properties:
+  - adId
+  - connectionId
+  required:
+  - connectionId
+  - adId
+- name: zernioAnalytics__pauseCampaign
+  group: Meta analytics & status
+  kind: dangerous
+  description: 'Currently disabled: Meta campaign status changes fail closed in AdMakeAI. Launch/pause from Meta Ads Manager.
+    Always confirm with the user before calling.'
+  rest: https://admakeai.com/api/v1/zernioAnalytics.pauseCampaign
+  in_server_card: true
+  input_properties:
+  - campaignId
+  - connectionId
+  required:
+  - connectionId
+  - campaignId
+- name: zernioAnalytics__resumeCampaign
+  group: Meta analytics & status
+  kind: dangerous
+  description: 'Currently disabled: Meta campaign status changes fail closed in AdMakeAI. Launch/resume from Meta Ads Manager.
+    Always confirm with the user before calling.'
+  rest: https://admakeai.com/api/v1/zernioAnalytics.resumeCampaign
+  in_server_card: true
+  input_properties:
+  - campaignId
+  - connectionId
+  required:
+  - connectionId
+  - campaignId
+- name: zernioAnalytics__pauseAdSet
+  group: Meta analytics & status
+  kind: dangerous
+  description: 'Currently disabled: Meta ad set status changes fail closed in AdMakeAI. Launch/pause from Meta Ads Manager.
+    Always confirm with the user before calling.'
+  rest: https://admakeai.com/api/v1/zernioAnalytics.pauseAdSet
+  in_server_card: true
+  input_properties:
+  - adSetId
+  - connectionId
+  required:
+  - connectionId
+  - adSetId
+- name: zernioAnalytics__resumeAdSet
+  group: Meta analytics & status
+  kind: dangerous
+  description: 'Currently disabled: Meta ad set status changes fail closed in AdMakeAI. Launch/resume from Meta Ads Manager.
+    Always confirm with the user before calling.'
+  rest: https://admakeai.com/api/v1/zernioAnalytics.resumeAdSet
+  in_server_card: true
+  input_properties:
+  - adSetId
+  - connectionId
+  required:
+  - connectionId
+  - adSetId

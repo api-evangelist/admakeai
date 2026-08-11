@@ -1,0 +1,46 @@
+generated: '2026-08-11'
+method: searched
+source: https://github.com/mesmerlord/admakeai-agent-skills/blob/main/skills/admakeai-api/SKILL.md;
+  https://admakeai.com/.well-known/agent-skills.json
+note: >-
+  AdMakeAI publishes its own Agent Skill, so nothing here was generated. The SKILL.md is saved verbatim. The provider
+  also serves a second, different skill surface — an agentskills.io v1 index at /.well-known/agent-skills.json listing
+  13 named capabilities — which is a discovery manifest of product features rather than installable skill packages.
+  Both are recorded; they do not agree on granularity.
+skills:
+  - name: admakeai-api
+    file: admakeai-api.md
+    method: searched
+    source: https://raw.githubusercontent.com/mesmerlord/admakeai-agent-skills/main/skills/admakeai-api/SKILL.md
+    api: AdMakeAI REST API
+    description: >-
+      Routes natural-language intent to the correct AdMakeAI tool, manages credit awareness, flags destructive Meta
+      actions for confirmation, teaches pagination, and supplies prompt patterns for ad creative.
+    allowed_tools: [Bash, Read, Write, WebFetch]
+    requires_env: [ADMAKEAI_API_KEY]
+    covers_operations: [user.getCredits, user.me, adGeneration.create, adGeneration.getById, adGeneration.list, adGeneration.getRecent,
+      adGeneration.searchAll, adGeneration.listPending, adSet.list, adSet.get, adSet.getGenerations, adSet.generateBatch,
+      adResearch.listProjects, facebookConnection.list, facebookUpload.getCampaigns, facebookUpload.getAdSets,
+      facebookUpload.runPreflight, facebookUpload.request, facebookUpload.list, facebookUpload.get, zernioAnalytics.tree,
+      zernioAnalytics.timeline, zernioAnalytics.listCampaigns, zernioAnalytics.listAds, zernioAnalytics.getAd,
+      zernioAnalytics.getAdAnalytics, zernioAnalytics.pauseAd, zernioAnalytics.resumeAd, zernioAnalytics.pauseCampaign,
+      zernioAnalytics.resumeCampaign, zernioAnalytics.pauseAdSet, zernioAnalytics.resumeAdSet]
+    install: npx skills add admakeai/agent-skills
+    install_broken: true
+    install_note: >-
+      The published install command resolves to github.com/admakeai/agent-skills, which returns 404. The repository is
+      at github.com/mesmerlord/admakeai-agent-skills.
+    x-findings:
+      - The skill documents adType values (PRODUCT_AD / BANNER_AD / SOCIAL_AD / DISPLAY_AD) and a quality enum
+        (low|high) that do not match the provider's own published tool schema (product_showcase / promotional /
+        testimonial / lifestyle / comparison / announcement; low|high|ultra).
+      - It teaches 30+ procedures; the live tool manifest carries 65, so the video generation, ad copy, competitor
+        research and project-brief groups are entirely untaught.
+declared_skill_index:
+  file: ../well-known/admakeai-agent-skills.json
+  schema: https://agentskills.io/schema/v1/index.json
+  served_at: https://admakeai.com/.well-known/agent-skills.json
+  count: 13
+  ids: [generate-ad-image, generate-ad-set-variations, generate-ugc-video-ad, research-competitor-ads, search-meta-ad-library,
+    generate-ad-copy, resize-meta-ad, chat-with-ai-ad-agent, draft-meta-campaigns, read-meta-ad-analytics, connect-over-mcp,
+    install-agent-skills, start-free-account]

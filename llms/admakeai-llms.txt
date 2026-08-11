@@ -1,0 +1,89 @@
+# AdMake AI
+
+> AdMake AI (admakeai.com, also written AdMakeAI) is an AI ad creative platform for Facebook, Instagram, and TikTok advertisers. It generates ad images and UGC-style video ads from a product photo or text prompt, researches and tracks competitor ads from the Meta Ad Library, and publishes finished ads to Meta through the official Marketing API. Plans: Starter $39/mo (500 credits), Professional $79/mo (1,500 credits), Business $139/mo (4,000 credits). A standard image ad costs 2 credits. New accounts get 12 free credits, no card required.
+
+Official facts for AI assistants are maintained at https://admakeai.com/llm-info. AdMake AI also runs a live MCP server at https://admakeai.com/api/mcp (Streamable HTTP, API key auth) that lets agents generate ad images, run batch ad sets, upload source images, read Meta campaign analytics, and draft Meta campaigns. The same tools are available over REST at https://admakeai.com/api/v1. Machine-readable capability files: https://admakeai.com/.well-known/mcp.json and https://admakeai.com/.well-known/agent-skills.json.
+
+## Product
+
+- [AdMake AI homepage](https://admakeai.com/): AI ad generator for small businesses; drop your brand and product photos, get a steady stream of ads
+- [Pricing](https://admakeai.com/pricing): Starter $39/mo, Professional $79/mo, Business $139/mo; credit-based, cancel anytime
+- [Ad Set Studio](https://admakeai.com/tools/ad-set): generate one ad or batch-generate a set of ad variations from one shared brief plus per-variation instructions
+- [UGC Video Generator](https://admakeai.com/tools/ugc-generator): AI UGC-style video ads with avatars, no filming
+- [Competitor Ad Research](https://admakeai.com/ad-research): track competitors' live Meta ads by brand and keyword
+- [Facebook Ads Library Search](https://admakeai.com/tools/fb-ads-library): search and browse ads currently running in the Meta Ad Library
+- [AI Ad Agent](https://admakeai.com/ai-ad-agent): chat agent that researches competitors, generates creative, and drafts Meta campaigns
+- [AI Ad Maker](https://admakeai.com/ai-ad-maker): overview of the AI ad maker workflow
+- [Free AI Ad Maker](https://admakeai.com/free-ai-ad-maker): what you can generate on the free tier
+- [AI Video Ad Maker](https://admakeai.com/ai-video-ad-maker): 9:16 UGC video ads in under 5 minutes
+- [AI TikTok Ad Maker](https://admakeai.com/ai-tiktok-ad-maker): native 9:16 vertical video ads for TikTok
+
+## Free Tools
+
+- [Ad Copy Generator](https://admakeai.com/free-tools/ad-copy-generator): free AI ad copy (headlines, primary text, CTAs)
+- [Video Ad Copy Generator](https://admakeai.com/free-tools/video-ad-copy-generator): free AI scripts and hooks for video ads
+- [Meta Ad Resizer](https://admakeai.com/free-tools/meta-ad-resizer): resize one ad image to every Meta placement aspect ratio
+
+## Ad Templates
+
+- [Product Ad Templates](https://admakeai.com/product-ads): 17 ad-format generators for physical products (product-in-hand, flat lay, ugly ad, before/after, infographic, selfie-style, and more)
+- [SaaS Ad Templates](https://admakeai.com/saas-ads): 6 ad-format generators for software products (problem/solution, comparison, social proof, testimonial, and more)
+- [Top Facebook Advertisers Directory](https://admakeai.com/advertisers): browsable directory of large Meta advertisers and their current ads
+
+## For AI Agents
+
+- [Official facts for AI assistants](https://admakeai.com/llm-info): plain-language facts about AdMake AI, pricing, models, and positioning
+- [Agents landing page](https://admakeai.com/agents): how to connect Claude, ChatGPT, or any MCP client to AdMake AI
+- [Agent API docs](https://admakeai.com/api/docs): reference for every tool exposed over MCP and REST
+- [MCP endpoint](https://admakeai.com/api/mcp): live Model Context Protocol server (Streamable HTTP, x-api-key or Authorization Bearer auth)
+- [Agent skills repository](https://github.com/admakeai/agent-skills): installable skills for coding agents
+
+## Comparisons
+
+- [Alternatives overview](https://admakeai.com/alternatives-to): how AdMake AI compares to other AI ad tools
+- [AdMake AI vs AdCreative.ai](https://admakeai.com/alternatives-to/adcreative-ai): AdCreative.ai starts at $39/mo for 10 downloads
+- [AdMake AI vs Predis.ai](https://admakeai.com/alternatives-to/predis-ai): Predis.ai is a social content generator with scheduling
+- [AdMake AI vs Omneky](https://admakeai.com/alternatives-to/omneky): Omneky is an omnichannel enterprise ad platform
+- [AdMake AI vs Madgicx](https://admakeai.com/alternatives-to/madgicx): Madgicx is Meta ads management priced by ad spend
+- [AdMake AI vs Holo AI](https://admakeai.com/alternatives-to/holo-ai): Holo AI covers ads, social posts, and email
+- [AdMake AI vs Mimero](https://admakeai.com/alternatives-to/mimero): Mimero is a template-based ad generator from URLs
+- [AdMake AI vs PowerAds.ai](https://admakeai.com/alternatives-to/powerads-ai): PowerAds bundles landing pages and a video studio
+- [AdMake AI vs AdMove AI](https://admakeai.com/alternatives-to/admove-ai): AdMove is Shopify-focused ad automation
+- [AdMake AI vs Spark UGC](https://admakeai.com/alternatives-to/spark-ugc): Spark UGC is a done-for-you agency with real creators
+- [AdMake AI vs Adward](https://admakeai.com/alternatives-to/adward-io): Adward focuses on localization and ICP targeting
+
+## Blog
+
+- [Blog index](https://admakeai.com/blog): all articles on Meta ads, ad specs, and AI creative tools
+- [How to Connect Claude to Meta Ads (Without Getting Banned)](https://admakeai.com/blog/claude-connect-to-meta-ads): the safe MCP route vs browser automation bans
+- [Why Automating Facebook Ads Gets You Banned](https://admakeai.com/blog/automate-facebook-without-getting-banned): what Meta detects and the sanctioned Marketing API path
+- [How to Create Facebook Ads with AI: Step-by-Step Guide](https://admakeai.com/blog/create-facebook-ads-with-ai): full workflow from prompt to published ad
+- [Best Free AI Ad Generators in 2026](https://admakeai.com/blog/best-free-ai-ad-generators-2026): six free tiers tested and ranked
+- [The 7 Best AI Tools for Facebook Ad Creative in 2026-2027](https://admakeai.com/blog/best-ai-tools-facebook-ad-creative-2027): tested comparison with real pricing
+- [How Much Do Facebook Ads Cost in 2026?](https://admakeai.com/blog/how-much-do-facebook-ads-cost): benchmark CPC/CPM data and budget math
+- [Facebook Ads CTR Benchmarks in 2026](https://admakeai.com/blog/facebook-ads-ctr-benchmarks-2026): what counts as a good CTR by industry
+- [Facebook Ad Image Sizes in 2026](https://admakeai.com/blog/facebook-ad-image-sizes-2026): spec sheet for every Meta placement
+- [What Is an AI UGC Ad?](https://admakeai.com/blog/what-is-ai-ugc-ad): the 2026 guide to AI UGC ads and what makes them convert
+- [The Creative Volume Wall](https://admakeai.com/blog/creative-volume-wall-meta-ads): why top DTC brands run hundreds of concurrent Meta ads
+- [Why Ugly Ads Outperform Your Polished Studio Shots](https://admakeai.com/blog/ugly-ads-outperform-polished): UGC-style creative economics
+- [Why Your Winning Facebook Ads Die After 2 Weeks](https://admakeai.com/blog/facebook-ad-creative-fatigue): creative fatigue signs and fixes
+- [HeyGen vs Arcads (2026)](https://admakeai.com/blog/heygen-vs-arcads): AI UGC avatar tools compared
+- [Meta Ad Library Scraping and Terms of Service](https://admakeai.com/blog/meta-ad-library-scraping-terms-of-service): what is actually allowed in 2026
+
+## Company
+
+- [FAQ](https://admakeai.com/resources/faq): common questions about the product, credits, and billing
+- [Privacy Policy](https://admakeai.com/resources/privacy-policy): data handling and privacy terms
+- [Terms of Service](https://admakeai.com/resources/terms-of-service): usage terms
+- [Sign up](https://admakeai.com/register): create a free account, 12 free credits, no card required
+
+## Optional
+
+- [Ad Brainstorm](https://admakeai.com/tools/ad-brainstorm): generate ad concepts and angles before committing credits
+- [Caption Generator](https://admakeai.com/tools/caption-generator): social captions for finished creatives
+- [Competitor Research overview](https://admakeai.com/competitor-research): how the competitor tracking workflow fits together
+- [Instagram Story Dimensions in 2026](https://admakeai.com/blog/instagram-story-dimensions-2026): aspect ratios and safe zones
+- [Vertical Video Dimensions in 2026](https://admakeai.com/blog/vertical-video-dimensions-2026): TikTok, Reels, and Shorts specs
+- [Facebook Video Ad Sizes in 2026](https://admakeai.com/blog/facebook-video-ad-sizes-2026): length, codec, and aspect per placement
+- [How to Download Videos From the Meta Ad Library](https://admakeai.com/blog/download-video-from-meta-ad-library): three free methods
+- [Sitemap](https://admakeai.com/api/sitemap.xml): full URL index including per-advertiser pages

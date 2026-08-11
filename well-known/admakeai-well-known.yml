@@ -1,0 +1,79 @@
+generated: '2026-08-11'
+method: probed
+source: live GET of each /.well-known/ path on https://admakeai.com
+host: https://admakeai.com
+note: >-
+  admakeai.com sits behind a Cloudflare managed challenge that answers HTTP 403 for every HTML path — including paths
+  that do not exist — but the /.well-known/ prefix and /llms.txt and /robots.txt are exempted and answer normally.
+  Every 404 below is therefore a genuine application 404 (a 22,813-byte Next.js not-found page), not a bot block.
+  Two of the 200s are non-standard paths the provider invented: /.well-known/mcp.json (an MCP server card) and
+  /.well-known/agent-skills.json (an agentskills.io v1 index). Both carry real documents and both are referenced from
+  /llms.txt, so they are recorded as served discovery surfaces.
+documents:
+  - path: /.well-known/mcp.json
+    status: 200
+    content_type: application/json
+    file: admakeai-mcp.json
+    schema: https://modelcontextprotocol.io/schema/mcp-server-card.json
+    note: MCP server card; enumerates 38 tools (the first-party plugin manifest carries 65 — see mcp/admakeai-mcp.yml).
+  - path: /.well-known/agent-skills.json
+    status: 200
+    content_type: application/json
+    file: admakeai-agent-skills.json
+    schema: https://agentskills.io/schema/v1/index.json
+    note: 13 declared skills, each with an id, description, url and tags.
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    content_type: application/json
+    file: admakeai-oauth-authorization-server.json
+    spec: RFC 8414
+  - path: /.well-known/oauth-protected-resource
+    status: 200
+    content_type: application/json
+    file: admakeai-oauth-protected-resource.json
+    spec: RFC 9728
+  - path: /.well-known/oauth-protected-resource/api/mcp
+    status: 200
+    content_type: application/json
+    file: admakeai-oauth-protected-resource-api-mcp.json
+    spec: RFC 9728
+    note: Per-resource metadata for the MCP endpoint, the path the 401 WWW-Authenticate challenge points at.
+  - path: /.well-known/security.txt
+    status: 404
+    spec: RFC 9116
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+    spec: RFC 9727
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+    spec: A2A 1.0.0
+  - path: /.well-known/agent.json
+    status: 404
+    note: Pre-0.3 A2A location; also absent, so no agent card artifact was written.
+  - path: /.well-known/mcp-server.json
+    status: 404
+  - path: /.well-known/llms.txt
+    status: 404
+    note: The real llms.txt is at the root, https://admakeai.com/llms.txt (200).
+  - path: /.well-known/ai.txt
+    status: 404
+  - path: /.well-known/openapi.json
+    status: 404
+  - path: /.well-known/apis.json
+    status: 404
+  - path: /.well-known/change-password
+    status: 404
+other_root_documents:
+  - path: /llms.txt
+    status: 200
+    content_type: text/plain
+    file: llms/admakeai-llms.txt
+  - path: /robots.txt
+    status: 200
+    content_type: text/plain
+    note: 'Allow: / with Disallow: /api; declares two sitemaps (/api/sitemap.xml, /api/sitemap-content.xml), both of which
+      sit under the disallowed /api prefix and both of which return 403 to a non-browser client.'

@@ -1,0 +1,109 @@
+generated: '2026-08-11'
+method: searched
+source: skills/admakeai-api.md (provider-published SKILL.md); https://github.com/mesmerlord/admakeai-mcp README;
+  https://admakeai.com/.well-known/mcp.json; mcp/admakeai-mcp-tools.json (65 tool inputSchemas)
+docs: https://admakeai.com/api/docs
+note: >-
+  Cross-cutting runtime semantics for both surfaces. AdMakeAI is a tRPC application projected two ways — as MCP tools
+  and as REST procedure paths — so the conventions below govern both. Everything here is quoted from a document the
+  provider published; nothing was inferred from behaviour, because live calls are unauthenticated-blocked.
+surfaces:
+  rest:
+    base: https://admakeai.com/api/v1
+    style: tRPC procedure paths (namespace.procedure), not resource REST
+    example: https://admakeai.com/api/v1/adGeneration.create
+  mcp:
+    url: https://admakeai.com/api/mcp
+    transport: streamable-http
+    naming: tRPC procedure path with "." replaced by "__" (adGeneration.create -> adGeneration__create)
+authentication:
+  style: api key header or OAuth 2.1 bearer
+  header: x-api-key
+  alternative: 'Authorization: Bearer <key>'
+  artifact: authentication/admakeai-authentication.yml
+request:
+  post: JSON body
+  get: 'All GET inputs go in a single query parameter: ?input=<URL-encoded JSON>'
+  content_type: application/json
+error_envelope:
+  style: tRPC error codes (FORBIDDEN, NOT_FOUND, UNAUTHORIZED)
+  rfc9457: false
+  artifact: errors/admakeai-error-codes.yml
+response_envelope:
+  rest: '{ ok, tool, data }'
+  mcp: 'unwrapped result inside content[0].text'
+  note: The two surfaces differ in envelope even though they are 1:1 in operations.
+pagination:
+  styles:
+    - style: page/perPage
+      params: [page, perPage]
+      default_per_page: 20
+      used_by: [adSet__list, adGeneration__list, zernioAnalytics__listAds, zernioAnalytics__listCampaigns, facebookUpload__list]
+    - style: cursor
+      params: [cursor]
+      response_field: nextCursor
+      used_by: [adGeneration__searchAll]
+    - style: limit/offset
+      params: [limit, offset]
+      default_limit: 30
+      max_limit: 100
+      used_by: [adResearch__getScrapedAds]
+      source: mcp/admakeai-mcp-tools.json inputSchema
+  note: Three pagination styles coexist across one API. The provider's own skill documents only the first two.
+async:
+  model: enqueue-and-poll
+  detail: >-
+    Image and video generation return immediately with { id, status: "PENDING" }. Poll adGeneration__getById (or
+    videoGeneration__getStatus) every 3-5 seconds until status === "COMPLETED". Typical completion 10-30s low quality,
+    30-90s high quality.
+  no_callbacks: true
+  note: There is no webhook or event surface — completion is discoverable only by polling.
+idempotency:
+  supported: false
+  header: null
+  note: >-
+    No idempotency key, no request de-duplication and no retry semantics are documented anywhere in the provider's
+    published surface. This matters more than usual here: adGeneration__create and adSet__generateBatch spend credits,
+    and facebookUpload__request creates a real Meta ad, so a retried call after a timeout has real cost. No
+    Idempotency pointer is emitted for this provider because there is nothing to point at.
+versioning:
+  scheme: uri-path
+  current: v1
+  base: https://admakeai.com/api/v1
+  artifact: lifecycle/admakeai-lifecycle.yml
+request_id_tracing:
+  documented: false
+rate_limit_signaling:
+  documented: false
+  artifact: rate-limits/admakeai-rate-limits.yml
+safety_conventions:
+  destructive_actions: >-
+    Tools that change real Meta assets are prefixed [DANGER: live action] in their own description and the provider
+    instructs agents to confirm with the user before calling them.
+  no_delete: Delete is never exposed on AdMakeAI or Meta resources — pause/revoke/unpublish only.
+  withheld_capability: Project creation is deliberately not exposed to agents.
+  artifact: agentic-access/admakeai-agentic-access.yml
+shared_parameters:
+  - name: aspectRatio
+    values: ['1:1', '4:5', '9:16', '16:9']
+    default: '1:1'
+  - name: quality
+    values: [low, high, ultra]
+    default: low
+    note: >-
+      The provider's own SKILL.md documents only low|high; the live tool schema also accepts "ultra". A published
+      teaching document and the published schema disagree.
+  - name: adType
+    values: [product_showcase, promotional, testimonial, lifestyle, comparison, announcement]
+    default: product_showcase
+    note: >-
+      SKILL.md documents a different, non-existent enum for this same field (PRODUCT_AD / BANNER_AD / SOCIAL_AD /
+      DISPLAY_AD). An agent following the published skill verbatim would send invalid values.
+  - name: projectId
+    note: Required by 15 tools; the provider instructs agents to call adResearch__listProjects first and never guess.
+x-findings:
+  - finding: skill-contradicts-schema
+    detail: >-
+      Two enums (adType, quality) documented in the provider's published Agent Skill do not match the inputSchema in the
+      provider's published tool manifest. The skill is the artifact an agent is told to install.
+    evidence: [skills/admakeai-api.md, mcp/admakeai-mcp-tools.json]

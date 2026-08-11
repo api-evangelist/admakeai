@@ -1,9 +1,14 @@
 name: AdMakeAI
 description: >-
   AI ad-creative platform for Meta, Instagram, and TikTok that turns product photos or prompts into finished ad images
-  and UGC-style video ads, batch-generates ad-set variations, researches competitor ads, reads Meta campaign analytics,
-  and drafts campaigns into Meta Ads Manager. Exposes a REST/JSON API, a hosted MCP server (59 tools), and a published
-  agent skill, all bound to one account/credit pool.
+  and UGC-style video ads, batch-generates ad-set variations, generates ad copy, researches competitor ads from the
+  Meta Ad Library, reads Meta campaign analytics, and drafts and publishes campaigns through the official Meta
+  Marketing API. Its machine-readable contract is not an OpenAPI: AdMakeAI is a tRPC application projected two ways,
+  as a hosted streamable-HTTP MCP server at /api/mcp and as 1:1 REST procedure paths at /api/v1, both bound to one
+  account and one credit pool. It implements the full MCP authorization stack (RFC 8414, RFC 9728, RFC 7591, PKCE
+  S256) with three scopes filtered at tools/list, publishes an llms.txt, an MCP server card and an agent-skills index
+  under /.well-known/, and ships a first-party Agent Skill for coding agents.
+image: https://admakeai.com/apple-touch-icon.png
 url: https://admakeai.apievangelist.com/apis.yml
 created: '2026-08-11'
 modified: '2026-08-11'
@@ -23,8 +28,11 @@ tags:
 apis:
   - name: AdMakeAI REST API
     description: >-
-      RPC-style JSON REST API with dot-named methods (e.g. adGeneration.list) covering ad image generation, batch ad
-      sets, Meta analytics (read-only), and Meta campaign draft publishing. Authenticated via x-api-key header.
+      RPC-style JSON REST API with dot-named tRPC procedure paths (e.g. adGeneration.create) covering ad image and
+      UGC video generation, batch ad sets, ad copy, competitor ad research, Meta analytics, and Meta campaign draft
+      publishing. POST bodies are JSON; GET inputs go in ?input=<URL-encoded JSON>; responses are wrapped as
+      { ok, tool, data }. Authenticated via an x-api-key header (or Authorization: Bearer). Every MCP tool is
+      reachable here 1:1. No OpenAPI is published.
     humanURL: https://admakeai.com/agents
     baseURL: https://admakeai.com/api/v1
     tags:
@@ -42,11 +50,24 @@ apis:
     properties:
       - type: Documentation
         url: https://admakeai.com/api/docs
+      - type: APIReference
+        url: https://admakeai.com/api/docs
+      - type: Authentication
+        url: authentication/admakeai-authentication.yml
+      - type: Conventions
+        url: conventions/admakeai-conventions.yml
+      - type: ErrorCatalog
+        url: errors/admakeai-error-codes.yml
+      - type: DataModel
+        url: data-model/admakeai-data-model.yml
   - name: AdMakeAI MCP Server
     description: >-
-      Hosted, stateless JSON-RPC-over-HTTP MCP server exposing 59 tools for ad generation, batch ad sets, Meta
-      analytics, and Meta draft publishing. Works with Claude Code/Desktop/web, Cursor, VS Code/Copilot, Windsurf,
-      Codex, Gemini CLI, and Cline. Authenticated via x-api-key header.
+      Hosted, stateless streamable-HTTP MCP server exposing 65 tools across account, projects, uploads, ad image
+      generation, ad copy, ad sets, UGC video, competitor research, Meta publishing and Meta analytics. Authorization
+      is OAuth 2.1 with dynamic client registration and PKCE S256 (scopes mcp:read, mcp:write, mcp:publish,
+      offline_access, filtered at tools/list) or an account API key. Listed in the official MCP registry as
+      com.admakeai/admakeai. Works with Claude Code/Desktop, Cursor, VS Code/Copilot, Windsurf, Codex, Gemini CLI,
+      and Cline.
     humanURL: https://admakeai.com/agents
     baseURL: https://admakeai.com/api/mcp
     tags:
@@ -64,12 +85,22 @@ apis:
     properties:
       - type: MCPServer
         url: https://admakeai.com/api/mcp
+      - type: MCPServer
+        url: mcp/admakeai-mcp.yml
+      - type: ToolCrosswalk
+        url: mcp/admakeai-tool-crosswalk.yml
+      - type: AgenticAccess
+        url: agentic-access/admakeai-agentic-access.yml
+      - type: OAuthScopes
+        url: scopes/admakeai-scopes.yml
       - type: Documentation
         url: https://admakeai.com/agents
   - name: AdMakeAI Agent Skill
     description: >-
-      Published SKILL.md that teaches an agent tool selection, credit mechanics, and prompt patterns. Installed via 'npx
-      skills add admakeai/agent-skills'.
+      Published SKILL.md that teaches an agent tool selection from natural-language intent, credit mechanics,
+      pagination, destructive-action confirmation, and prompt patterns for ad creative. Installed via
+      'npx skills add admakeai/agent-skills' — note that command resolves to a GitHub org that does not exist; the
+      repository is at github.com/mesmerlord/admakeai-agent-skills.
     humanURL: https://admakeai.com/agents
     baseURL: https://admakeai.com/agents
     tags:
@@ -87,11 +118,97 @@ apis:
     properties:
       - type: AgentSkill
         url: https://admakeai.com/agents
+      - type: AgentSkill
+        url: skills/_index.yml
+      - type: SourceCode
+        url: https://github.com/mesmerlord/admakeai-agent-skills
+common:
+  - type: WellKnown
+    url: well-known/admakeai-well-known.yml
+  - type: LLMsTxt
+    url: llms/admakeai-llms.txt
+  - type: Packages
+    url: packages/admakeai-packages.yml
+  - type: Authentication
+    url: authentication/admakeai-authentication.yml
+  - type: OAuthScopes
+    url: scopes/admakeai-scopes.yml
+  - type: AgenticAccess
+    url: agentic-access/admakeai-agentic-access.yml
+  - type: AgentSkill
+    url: skills/_index.yml
+  - type: Conventions
+    url: conventions/admakeai-conventions.yml
+  - type: ErrorCatalog
+    url: errors/admakeai-error-codes.yml
+  - type: Conformance
+    url: conformance/admakeai-conformance.yml
+  - type: Lifecycle
+    url: lifecycle/admakeai-lifecycle.yml
+  - type: DataModel
+    url: data-model/admakeai-data-model.yml
+  - type: Plans
+    url: plans/admakeai-plans-pricing.yml
+  - type: RateLimits
+    url: rate-limits/admakeai-rate-limits.yml
+  - type: DomainSecurity
+    url: security/admakeai-domain-security.yml
+  - type: DeveloperPortal
+    url: https://admakeai.com/agents
+  - type: Documentation
+    url: https://admakeai.com/api/docs
+  - type: APIReference
+    url: https://admakeai.com/api/docs
+  - type: GettingStarted
+    url: https://admakeai.com/connect
+  - type: Support
+    url: https://admakeai.com/resources/faq
+  - type: Blog
+    url: https://admakeai.com/blog
+  - type: Pricing
+    url: https://admakeai.com/pricing
+  - type: SignUp
+    url: https://admakeai.com/register
+  - type: TermsOfService
+    url: https://admakeai.com/resources/terms-of-service
+  - type: PrivacyPolicy
+    url: https://admakeai.com/resources/privacy-policy
+  - type: SourceCode
+    url: https://github.com/mesmerlord/admakeai-mcp
 maintainers:
   - FN: AdMakeAI
     url: https://admakeai.com/
+    email: support@admakeai.com
 generated:
   by: apis.io/add
   model: claude-opus-4-8
   confidence: 90
   at: '2026-08-11T12:03:43.826Z'
+x-enrichment:
+  date: '2026-08-11'
+  status: enriched
+  artifacts_added: 24
+  pass: local-v1
+x-coverage:
+  state: covered
+  note: >-
+    The human surface of admakeai.com is unreadable to any non-browser client — every HTML path, including paths that
+    do not exist, returns HTTP 403 behind a Cloudflare managed challenge, so /pricing, /api/docs, /blog, /connect and
+    the declared sitemaps could not be read. The machine surface is exempted from that challenge and is unusually
+    rich: /llms.txt, /.well-known/mcp.json, /.well-known/agent-skills.json and the OAuth metadata documents all
+    returned 200, and a first-party 65-tool manifest with input schemas was recovered from the provider's GitHub
+    repositories. This profile is therefore built entirely from machine-readable sources.
+  evidence:
+    - url: https://admakeai.com/llms.txt
+      status: 200
+    - url: https://admakeai.com/.well-known/mcp.json
+      status: 200
+    - url: https://admakeai.com/.well-known/oauth-authorization-server
+      status: 200
+    - url: https://admakeai.com/api/docs
+      status: 403
+    - url: https://admakeai.com/api/mcp
+      status: 403
+    - url: https://github.com/admakeai/agent-skills
+      status: 404
+  checked: '2026-08-11'

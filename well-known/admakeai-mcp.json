@@ -1,0 +1,115 @@
+{
+  "$schema": "https://modelcontextprotocol.io/schema/mcp-server-card.json",
+  "name": "admakeai",
+  "title": "AdMake AI - AI Ad Creative Platform",
+  "description": "AdMake AI generates Facebook, Instagram, and TikTok ad images and UGC-style video ads from a product photo or text prompt, tracks competitor ads from the Meta Ad Library, and publishes finished ads to Meta through the official Marketing API. This card describes how AI agents can discover and connect to AdMake AI's live MCP server.",
+  "version": "1.0.0",
+  "homepage": "https://admakeai.com",
+  "documentation": "https://admakeai.com/api/docs",
+  "contact": {
+    "name": "AdMake AI",
+    "email": "support@admakeai.com",
+    "url": "https://admakeai.com/resources/faq"
+  },
+  "vendor": {
+    "name": "AdMake AI",
+    "url": "https://admakeai.com"
+  },
+  "capabilities": {
+    "discovery": {
+      "llmsTxt": "https://admakeai.com/llms.txt",
+      "llmInfo": "https://admakeai.com/llm-info",
+      "sitemap": "https://admakeai.com/api/sitemap.xml",
+      "agentSkills": "https://admakeai.com/.well-known/agent-skills.json",
+      "agentsLanding": "https://admakeai.com/agents",
+      "restApi": "https://admakeai.com/api/v1",
+      "apiDocs": "https://admakeai.com/api/docs",
+      "skillRepository": "https://github.com/admakeai/agent-skills"
+    }
+  },
+  "servers": [
+    {
+      "name": "admakeai",
+      "version": "1.0.0",
+      "url": "https://admakeai.com/api/mcp",
+      "transport": "streamable-http",
+      "authentication": {
+        "required": true,
+        "type": "oauth2",
+        "alternativeTypes": ["apiKey"],
+        "headers": ["Authorization: Bearer <token>", "x-api-key: <key>"],
+        "getKeyAt": "https://admakeai.com/dashboard/integrations/api",
+        "description": "Two options. Clients that speak the MCP authorization spec (for example Claude custom connectors) use OAuth 2.1: an unauthenticated request returns 401 with a WWW-Authenticate resource_metadata pointer, dynamic client registration is open, and the authorization-code flow with S256 PKCE issues a scoped token. Everything else uses an AdMake AI API key created at /dashboard/integrations/api; keys are revocable and may have an expiry.",
+        "oauth": {
+          "protectedResourceMetadata": "https://admakeai.com/.well-known/oauth-protected-resource/api/mcp",
+          "authorizationServerMetadata": "https://admakeai.com/.well-known/oauth-authorization-server",
+          "registrationEndpoint": "https://admakeai.com/api/oauth/register",
+          "authorizationEndpoint": "https://admakeai.com/oauth/authorize",
+          "tokenEndpoint": "https://admakeai.com/api/oauth/token",
+          "revocationEndpoint": "https://admakeai.com/api/oauth/revoke",
+          "dynamicClientRegistration": true,
+          "codeChallengeMethods": ["S256"],
+          "scopes": {
+            "mcp:read": "Read the account, projects, generated ads, and Facebook ad performance.",
+            "mcp:write": "Generate ads, upload images, and prepare campaign drafts. Spends credits.",
+            "mcp:publish": "Push drafts live and pause or resume Facebook campaigns, ad sets, and ads.",
+            "offline_access": "Issue a rotating refresh token."
+          },
+          "note": "Tools are filtered by granted scope: a connection approved without mcp:publish cannot even list the live-action tools."
+        }
+      },
+      "capabilities": {
+        "tools": true,
+        "resources": false,
+        "prompts": false
+      },
+      "notes": [
+        "Tool names are tRPC procedure paths with dots replaced by double underscores, for example adGeneration.create becomes adGeneration__create.",
+        "Input schemas are served over the standard MCP tools/list call.",
+        "No delete operations are exposed. Tools marked dangerous create or change real Meta ads and require explicit user confirmation before calling.",
+        "Meta ad, ad set, and campaign pause/resume tools are registered but currently disabled and fail closed; use Meta Ads Manager for status changes.",
+        "The same tool allowlist is available over REST at https://admakeai.com/api/v1 with the same API key. Human-readable reference: https://admakeai.com/api/docs."
+      ],
+      "tools": [
+        { "name": "user__me", "kind": "read", "description": "Get the authenticated user's profile, plan, and credit balance." },
+        { "name": "user__getCredits", "kind": "read", "description": "Get the authenticated user's current credit balance." },
+        { "name": "upload__uploadImageBase64", "kind": "write", "description": "Upload a JPEG, PNG, or WebP image from base64 bytes into AdMake AI storage. Returns an image ID and public URL for use in generation or campaign drafts." },
+        { "name": "upload__getUserImages", "kind": "read", "description": "List previously uploaded source images, newest first, with pagination." },
+        { "name": "adGeneration__create", "kind": "write", "description": "Create a new ad image generation from a text prompt and optional product image. Returns a generation ID to poll with adGeneration__getById." },
+        { "name": "adGeneration__getById", "kind": "read", "description": "Get the status, prompt, and resulting image URLs of a single ad generation. Poll until status is COMPLETED." },
+        { "name": "adGeneration__list", "kind": "read", "description": "Paginated list of the user's ad generations, newest first." },
+        { "name": "adGeneration__getRecent", "kind": "read", "description": "Get the user's most recent ad generations (default limit 12)." },
+        { "name": "adGeneration__searchAll", "kind": "read", "description": "Full-text search across the user's ad generations by prompt." },
+        { "name": "adGeneration__listPending", "kind": "read", "description": "List the user's currently pending ad generations." },
+        { "name": "adSet__list", "kind": "read", "description": "Paginated list of the user's ad sets." },
+        { "name": "adSet__get", "kind": "read", "description": "Get an ad set by ID, including its general instructions." },
+        { "name": "adSet__getGenerations", "kind": "read", "description": "List all ad generations belonging to an ad set." },
+        { "name": "adSet__generateBatch", "kind": "write", "description": "Generate a batch of ad variations from one ad set plus per-variation instructions. Enqueues background jobs and returns their generation IDs." },
+        { "name": "adResearch__listProjects", "kind": "read", "description": "List the user's research and ad-generation projects." },
+        { "name": "facebookConnection__list", "kind": "read", "description": "List the user's connected Facebook ad accounts and Pages." },
+        { "name": "facebookUpload__getCampaigns", "kind": "read", "description": "List Meta campaigns for a specific connected ad account." },
+        { "name": "facebookUpload__getAdSets", "kind": "read", "description": "List Meta ad sets under a given campaign." },
+        { "name": "facebookUpload__runPreflight", "kind": "write", "description": "Validate an ad creative and ad account pair for Meta upload (image dimensions, copy length) without uploading." },
+        { "name": "facebookUpload__request", "kind": "dangerous", "description": "Upload an AdMake AI generated ad creative to a Meta ad account, campaign, and ad set. Creates a real ad on Meta; always confirm with the user first." },
+        { "name": "facebookUpload__list", "kind": "read", "description": "List previously uploaded ads, filterable by ad account and state." },
+        { "name": "facebookUpload__get", "kind": "read", "description": "Get the upload state and Meta IDs of a single uploaded ad." },
+        { "name": "facebookCampaignDraft__sourceAssets", "kind": "read", "description": "Resolve previously uploaded Meta ads into reusable creative assets for a campaign draft." },
+        { "name": "facebookCampaignDraft__getAgentDraft", "kind": "read", "description": "Read a saved agent-created Facebook campaign draft by draft ID before pushing." },
+        { "name": "facebookCampaignDraft__pushAgentDraft", "kind": "dangerous", "description": "Push a saved agent-created Facebook campaign draft to Meta as draft campaigns, ad sets, and ads. Always confirm with the user first." },
+        { "name": "facebookCampaignDraft__pushDraftCampaign", "kind": "dangerous", "description": "Create Meta draft campaigns, ad sets, and ads from explicit campaign data, ad copy, and image URLs. Supports externally hosted image URLs. Always confirm with the user first." },
+        { "name": "zernioAnalytics__tree", "kind": "read", "description": "Get the campaign, ad set, and ad hierarchy for an ad account." },
+        { "name": "zernioAnalytics__timeline", "kind": "read", "description": "Get time-series performance metrics for an ad account." },
+        { "name": "zernioAnalytics__listCampaigns", "kind": "read", "description": "List Meta campaigns with rolled-up performance metrics." },
+        { "name": "zernioAnalytics__listAds", "kind": "read", "description": "List Meta ads under a campaign or ad set with performance metrics." },
+        { "name": "zernioAnalytics__getAd", "kind": "read", "description": "Get a single Meta ad's metadata and creative." },
+        { "name": "zernioAnalytics__getAdAnalytics", "kind": "read", "description": "Get day-by-day analytics (spend, CTR, CPC, conversions) for a single Meta ad." },
+        { "name": "zernioAnalytics__pauseAd", "kind": "dangerous", "disabled": true, "description": "Currently disabled; Meta ad status changes fail closed. Use Meta Ads Manager." },
+        { "name": "zernioAnalytics__resumeAd", "kind": "dangerous", "disabled": true, "description": "Currently disabled; Meta ad status changes fail closed. Use Meta Ads Manager." },
+        { "name": "zernioAnalytics__pauseCampaign", "kind": "dangerous", "disabled": true, "description": "Currently disabled; Meta campaign status changes fail closed. Use Meta Ads Manager." },
+        { "name": "zernioAnalytics__resumeCampaign", "kind": "dangerous", "disabled": true, "description": "Currently disabled; Meta campaign status changes fail closed. Use Meta Ads Manager." },
+        { "name": "zernioAnalytics__pauseAdSet", "kind": "dangerous", "disabled": true, "description": "Currently disabled; Meta ad set status changes fail closed. Use Meta Ads Manager." },
+        { "name": "zernioAnalytics__resumeAdSet", "kind": "dangerous", "disabled": true, "description": "Currently disabled; Meta ad set status changes fail closed. Use Meta Ads Manager." }
+      ]
+    }
+  ]
+}

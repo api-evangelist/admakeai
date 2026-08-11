@@ -1,0 +1,579 @@
+generated: '2026-08-11'
+method: derived
+source: mcp/admakeai-mcp.yml (65-tool manifest) + skills/admakeai-api.md ("REST endpoints map 1:1 to MCP tools") + https://github.com/mesmerlord/admakeai-mcp
+  README
+note: 'AdMakeAI publishes NO OpenAPI. This crosswalk therefore binds each MCP tool to its REST *path*, not to an OpenAPI operationId.
+  The binding rule is published by the provider verbatim: "MCP tool name: adGeneration__create -> REST path: /api/v1/adGeneration.create",
+  "REST endpoints map 1:1 to MCP tools", and "every tool here is also reachable over plain REST at https://admakeai.com/api/v1/<tool>".
+  Nothing here was inferred beyond applying that stated rule.'
+surfaces:
+  openapi:
+    present: false
+    note: No OpenAPI/Swagger document found on any host. /openapi.json, /api/openapi.json, /api/v1/openapi.json, /swagger.json,
+      /api/docs.json and /api/spec.json all return HTTP 403 (Cloudflare managed challenge, same response as every other HTML
+      path including nonexistent ones). /.well-known/openapi.json returns an application 404.
+  graphql:
+    present: false
+  mcp:
+    url: https://admakeai.com/api/mcp
+    transport: streamable-http
+    tools_list_gated: true
+    note: Anonymous POST tools/list returns 403 Cloudflare challenge, so the live schema was not introspected; tools and inputSchemas
+      come from the first-party plugin manifest instead.
+  rest:
+    base: https://admakeai.com/api/v1
+    style: tRPC procedure paths
+    note: POST body is JSON; GET inputs go in ?input=<URL-encoded JSON>; responses are wrapped as {ok, tool, data}. robots.txt
+      disallows /api for crawlers.
+binding_rule:
+  mcp: <namespace>__<procedure>
+  rest: https://admakeai.com/api/v1/<namespace>.<procedure>
+  published_by_provider: true
+crosswalk:
+- tool: user__me
+  category: Account & credits
+  rest:
+  - https://admakeai.com/api/v1/user.me
+  binding: rest
+  confidence: high
+  note: Provider-published 1:1 name mapping; no OpenAPI operationId exists to bind to.
+- tool: user__getCredits
+  category: Account & credits
+  rest:
+  - https://admakeai.com/api/v1/user.getCredits
+  binding: rest
+  confidence: high
+  note: Provider-published 1:1 name mapping; no OpenAPI operationId exists to bind to.
+- tool: adResearch__listProjects
+  category: Projects & competitor research
+  rest:
+  - https://admakeai.com/api/v1/adResearch.listProjects
+  binding: rest
+  confidence: high
+  note: Provider-published 1:1 name mapping; no OpenAPI operationId exists to bind to.
+- tool: adResearch__getProject
+  category: Projects & competitor research
+  rest:
+  - https://admakeai.com/api/v1/adResearch.getProject
+  binding: rest
+  confidence: high
+  note: Provider-published 1:1 name mapping; no OpenAPI operationId exists to bind to.
+- tool: adResearch__pollStatus
+  category: Projects & competitor research
+  rest:
+  - https://admakeai.com/api/v1/adResearch.pollStatus
+  binding: rest
+  confidence: high
+  note: Provider-published 1:1 name mapping; no OpenAPI operationId exists to bind to.
+- tool: project__updateBrief
+  category: Projects
+  rest:
+  - https://admakeai.com/api/v1/project.updateBrief
+  binding: rest
+  confidence: high
+  note: Provider-published 1:1 name mapping; no OpenAPI operationId exists to bind to.
+- tool: project__getAssets
+  category: Projects
+  rest:
+  - https://admakeai.com/api/v1/project.getAssets
+  binding: rest
+  confidence: high
+  note: Provider-published 1:1 name mapping; no OpenAPI operationId exists to bind to.
+- tool: upload__uploadImageBase64
+  category: Source image uploads
+  rest:
+  - https://admakeai.com/api/v1/upload.uploadImageBase64
+  binding: rest
+  confidence: high
+  note: Provider-published 1:1 name mapping; no OpenAPI operationId exists to bind to.
+- tool: upload__getUserImages
+  category: Source image uploads
+  rest:
+  - https://admakeai.com/api/v1/upload.getUserImages
+  binding: rest
+  confidence: high
+  note: Provider-published 1:1 name mapping; no OpenAPI operationId exists to bind to.
+- tool: adGeneration__create
+  category: Ad image generation
+  rest:
+  - https://admakeai.com/api/v1/adGeneration.create
+  binding: rest
+  confidence: high
+  note: Provider-published 1:1 name mapping; no OpenAPI operationId exists to bind to.
+- tool: adGeneration__generateImage
+  category: Ad image generation
+  rest:
+  - https://admakeai.com/api/v1/adGeneration.generateImage
+  binding: rest
+  confidence: high
+  note: Provider-published 1:1 name mapping; no OpenAPI operationId exists to bind to.
+- tool: adGeneration__edit
+  category: Ad image generation
+  rest:
+  - https://admakeai.com/api/v1/adGeneration.edit
+  binding: rest
+  confidence: high
+  note: Provider-published 1:1 name mapping; no OpenAPI operationId exists to bind to.
+- tool: adGeneration__getById
+  category: Ad image generation
+  rest:
+  - https://admakeai.com/api/v1/adGeneration.getById
+  binding: rest
+  confidence: high
+  note: Provider-published 1:1 name mapping; no OpenAPI operationId exists to bind to.
+- tool: adGeneration__list
+  category: Ad image generation
+  rest:
+  - https://admakeai.com/api/v1/adGeneration.list
+  binding: rest
+  confidence: high
+  note: Provider-published 1:1 name mapping; no OpenAPI operationId exists to bind to.
+- tool: adGeneration__getRecent
+  category: Ad image generation
+  rest:
+  - https://admakeai.com/api/v1/adGeneration.getRecent
+  binding: rest
+  confidence: high
+  note: Provider-published 1:1 name mapping; no OpenAPI operationId exists to bind to.
+- tool: adGeneration__searchAll
+  category: Ad image generation
+  rest:
+  - https://admakeai.com/api/v1/adGeneration.searchAll
+  binding: rest
+  confidence: high
+  note: Provider-published 1:1 name mapping; no OpenAPI operationId exists to bind to.
+- tool: adGeneration__listPending
+  category: Ad image generation
+  rest:
+  - https://admakeai.com/api/v1/adGeneration.listPending
+  binding: rest
+  confidence: high
+  note: Provider-published 1:1 name mapping; no OpenAPI operationId exists to bind to.
+- tool: adGeneration__toggleFavorite
+  category: Ad image generation
+  rest:
+  - https://admakeai.com/api/v1/adGeneration.toggleFavorite
+  binding: rest
+  confidence: high
+  note: Provider-published 1:1 name mapping; no OpenAPI operationId exists to bind to.
+- tool: adCopyGeneration__generate
+  category: Ad copy generation
+  rest:
+  - https://admakeai.com/api/v1/adCopyGeneration.generate
+  binding: rest
+  confidence: high
+  note: Provider-published 1:1 name mapping; no OpenAPI operationId exists to bind to.
+- tool: adCopyGeneration__getMessagingStyles
+  category: Ad copy generation
+  rest:
+  - https://admakeai.com/api/v1/adCopyGeneration.getMessagingStyles
+  binding: rest
+  confidence: high
+  note: Provider-published 1:1 name mapping; no OpenAPI operationId exists to bind to.
+- tool: adSet__list
+  category: Ad sets (batch creative)
+  rest:
+  - https://admakeai.com/api/v1/adSet.list
+  binding: rest
+  confidence: high
+  note: Provider-published 1:1 name mapping; no OpenAPI operationId exists to bind to.
+- tool: adSet__get
+  category: Ad sets (batch creative)
+  rest:
+  - https://admakeai.com/api/v1/adSet.get
+  binding: rest
+  confidence: high
+  note: Provider-published 1:1 name mapping; no OpenAPI operationId exists to bind to.
+- tool: adSet__create
+  category: Ad sets (batch creative)
+  rest:
+  - https://admakeai.com/api/v1/adSet.create
+  binding: rest
+  confidence: high
+  note: Provider-published 1:1 name mapping; no OpenAPI operationId exists to bind to.
+- tool: adSet__update
+  category: Ad sets (batch creative)
+  rest:
+  - https://admakeai.com/api/v1/adSet.update
+  binding: rest
+  confidence: high
+  note: Provider-published 1:1 name mapping; no OpenAPI operationId exists to bind to.
+- tool: adSet__getGenerations
+  category: Ad sets (batch creative)
+  rest:
+  - https://admakeai.com/api/v1/adSet.getGenerations
+  binding: rest
+  confidence: high
+  note: Provider-published 1:1 name mapping; no OpenAPI operationId exists to bind to.
+- tool: adSet__generateBatch
+  category: Ad sets (batch creative)
+  rest:
+  - https://admakeai.com/api/v1/adSet.generateBatch
+  binding: rest
+  confidence: high
+  note: Provider-published 1:1 name mapping; no OpenAPI operationId exists to bind to.
+- tool: adSet__suggestDirections
+  category: Ad sets (batch creative)
+  rest:
+  - https://admakeai.com/api/v1/adSet.suggestDirections
+  binding: rest
+  confidence: high
+  note: Provider-published 1:1 name mapping; no OpenAPI operationId exists to bind to.
+- tool: videoGeneration__start
+  category: UGC video ads
+  rest:
+  - https://admakeai.com/api/v1/videoGeneration.start
+  binding: rest
+  confidence: high
+  note: Provider-published 1:1 name mapping; no OpenAPI operationId exists to bind to.
+- tool: videoGeneration__getStatus
+  category: UGC video ads
+  rest:
+  - https://admakeai.com/api/v1/videoGeneration.getStatus
+  binding: rest
+  confidence: high
+  note: Provider-published 1:1 name mapping; no OpenAPI operationId exists to bind to.
+- tool: videoGeneration__list
+  category: UGC video ads
+  rest:
+  - https://admakeai.com/api/v1/videoGeneration.list
+  binding: rest
+  confidence: high
+  note: Provider-published 1:1 name mapping; no OpenAPI operationId exists to bind to.
+- tool: videoGeneration__listPending
+  category: UGC video ads
+  rest:
+  - https://admakeai.com/api/v1/videoGeneration.listPending
+  binding: rest
+  confidence: high
+  note: Provider-published 1:1 name mapping; no OpenAPI operationId exists to bind to.
+- tool: adResearch__searchCompanies
+  category: Projects & competitor research
+  rest:
+  - https://admakeai.com/api/v1/adResearch.searchCompanies
+  binding: rest
+  confidence: high
+  note: Provider-published 1:1 name mapping; no OpenAPI operationId exists to bind to.
+- tool: adResearch__getCompanyAds
+  category: Projects & competitor research
+  rest:
+  - https://admakeai.com/api/v1/adResearch.getCompanyAds
+  binding: rest
+  confidence: high
+  note: Provider-published 1:1 name mapping; no OpenAPI operationId exists to bind to.
+- tool: adResearch__addCompetitors
+  category: Projects & competitor research
+  rest:
+  - https://admakeai.com/api/v1/adResearch.addCompetitors
+  binding: rest
+  confidence: high
+  note: Provider-published 1:1 name mapping; no OpenAPI operationId exists to bind to.
+- tool: adResearch__scrapeCompetitor
+  category: Projects & competitor research
+  rest:
+  - https://admakeai.com/api/v1/adResearch.scrapeCompetitor
+  binding: rest
+  confidence: high
+  note: Provider-published 1:1 name mapping; no OpenAPI operationId exists to bind to.
+- tool: adResearch__getCompetitorPreview
+  category: Projects & competitor research
+  rest:
+  - https://admakeai.com/api/v1/adResearch.getCompetitorPreview
+  binding: rest
+  confidence: high
+  note: Provider-published 1:1 name mapping; no OpenAPI operationId exists to bind to.
+- tool: adResearch__getScrapedAds
+  category: Projects & competitor research
+  rest:
+  - https://admakeai.com/api/v1/adResearch.getScrapedAds
+  binding: rest
+  confidence: high
+  note: Provider-published 1:1 name mapping; no OpenAPI operationId exists to bind to.
+- tool: adResearch__getAdDetails
+  category: Projects & competitor research
+  rest:
+  - https://admakeai.com/api/v1/adResearch.getAdDetails
+  binding: rest
+  confidence: high
+  note: Provider-published 1:1 name mapping; no OpenAPI operationId exists to bind to.
+- tool: adResearch__saveInspiration
+  category: Projects & competitor research
+  rest:
+  - https://admakeai.com/api/v1/adResearch.saveInspiration
+  binding: rest
+  confidence: high
+  note: Provider-published 1:1 name mapping; no OpenAPI operationId exists to bind to.
+- tool: adResearch__getSavedInspirations
+  category: Projects & competitor research
+  rest:
+  - https://admakeai.com/api/v1/adResearch.getSavedInspirations
+  binding: rest
+  confidence: high
+  note: Provider-published 1:1 name mapping; no OpenAPI operationId exists to bind to.
+- tool: facebookConnection__list
+  category: Meta connections
+  rest:
+  - https://admakeai.com/api/v1/facebookConnection.list
+  binding: rest
+  confidence: high
+  note: Provider-published 1:1 name mapping; no OpenAPI operationId exists to bind to.
+- tool: facebookUpload__getCampaigns
+  category: Meta ad upload
+  rest:
+  - https://admakeai.com/api/v1/facebookUpload.getCampaigns
+  binding: rest
+  confidence: high
+  note: Provider-published 1:1 name mapping; no OpenAPI operationId exists to bind to.
+- tool: facebookUpload__getAdSets
+  category: Meta ad upload
+  rest:
+  - https://admakeai.com/api/v1/facebookUpload.getAdSets
+  binding: rest
+  confidence: high
+  note: Provider-published 1:1 name mapping; no OpenAPI operationId exists to bind to.
+- tool: facebookUpload__runPreflight
+  category: Meta ad upload
+  rest:
+  - https://admakeai.com/api/v1/facebookUpload.runPreflight
+  binding: rest
+  confidence: high
+  note: Provider-published 1:1 name mapping; no OpenAPI operationId exists to bind to.
+- tool: facebookUpload__request
+  category: Meta ad upload
+  rest:
+  - https://admakeai.com/api/v1/facebookUpload.request
+  binding: rest
+  confidence: high
+  note: Provider-published 1:1 name mapping; no OpenAPI operationId exists to bind to.
+- tool: facebookUpload__list
+  category: Meta ad upload
+  rest:
+  - https://admakeai.com/api/v1/facebookUpload.list
+  binding: rest
+  confidence: high
+  note: Provider-published 1:1 name mapping; no OpenAPI operationId exists to bind to.
+- tool: facebookUpload__get
+  category: Meta ad upload
+  rest:
+  - https://admakeai.com/api/v1/facebookUpload.get
+  binding: rest
+  confidence: high
+  note: Provider-published 1:1 name mapping; no OpenAPI operationId exists to bind to.
+- tool: facebookCampaignDraft__sourceAssets
+  category: Meta campaign drafts
+  rest:
+  - https://admakeai.com/api/v1/facebookCampaignDraft.sourceAssets
+  binding: rest
+  confidence: high
+  note: Provider-published 1:1 name mapping; no OpenAPI operationId exists to bind to.
+- tool: facebookCampaignDraft__getAgentDraft
+  category: Meta campaign drafts
+  rest:
+  - https://admakeai.com/api/v1/facebookCampaignDraft.getAgentDraft
+  binding: rest
+  confidence: high
+  note: Provider-published 1:1 name mapping; no OpenAPI operationId exists to bind to.
+- tool: facebookCampaignDraft__pushAgentDraft
+  category: Meta campaign drafts
+  rest:
+  - https://admakeai.com/api/v1/facebookCampaignDraft.pushAgentDraft
+  binding: rest
+  confidence: high
+  note: Provider-published 1:1 name mapping; no OpenAPI operationId exists to bind to.
+- tool: facebookCampaignDraft__pushDraftCampaign
+  category: Meta campaign drafts
+  rest:
+  - https://admakeai.com/api/v1/facebookCampaignDraft.pushDraftCampaign
+  binding: rest
+  confidence: high
+  note: Provider-published 1:1 name mapping; no OpenAPI operationId exists to bind to.
+- tool: zernioAnalytics__accountOverview
+  category: Meta analytics & status
+  rest:
+  - https://admakeai.com/api/v1/zernioAnalytics.accountOverview
+  binding: rest
+  confidence: high
+  note: Provider-published 1:1 name mapping; no OpenAPI operationId exists to bind to.
+- tool: zernioAnalytics__tree
+  category: Meta analytics & status
+  rest:
+  - https://admakeai.com/api/v1/zernioAnalytics.tree
+  binding: rest
+  confidence: high
+  note: Provider-published 1:1 name mapping; no OpenAPI operationId exists to bind to.
+- tool: zernioAnalytics__timeline
+  category: Meta analytics & status
+  rest:
+  - https://admakeai.com/api/v1/zernioAnalytics.timeline
+  binding: rest
+  confidence: high
+  note: Provider-published 1:1 name mapping; no OpenAPI operationId exists to bind to.
+- tool: zernioAnalytics__listCampaigns
+  category: Meta analytics & status
+  rest:
+  - https://admakeai.com/api/v1/zernioAnalytics.listCampaigns
+  binding: rest
+  confidence: high
+  note: Provider-published 1:1 name mapping; no OpenAPI operationId exists to bind to.
+- tool: zernioAnalytics__listAds
+  category: Meta analytics & status
+  rest:
+  - https://admakeai.com/api/v1/zernioAnalytics.listAds
+  binding: rest
+  confidence: high
+  note: Provider-published 1:1 name mapping; no OpenAPI operationId exists to bind to.
+- tool: zernioAnalytics__getAd
+  category: Meta analytics & status
+  rest:
+  - https://admakeai.com/api/v1/zernioAnalytics.getAd
+  binding: rest
+  confidence: high
+  note: Provider-published 1:1 name mapping; no OpenAPI operationId exists to bind to.
+- tool: zernioAnalytics__getAdAnalytics
+  category: Meta analytics & status
+  rest:
+  - https://admakeai.com/api/v1/zernioAnalytics.getAdAnalytics
+  binding: rest
+  confidence: high
+  note: Provider-published 1:1 name mapping; no OpenAPI operationId exists to bind to.
+- tool: zernioAnalytics__getAdComments
+  category: Meta analytics & status
+  rest:
+  - https://admakeai.com/api/v1/zernioAnalytics.getAdComments
+  binding: rest
+  confidence: high
+  note: Provider-published 1:1 name mapping; no OpenAPI operationId exists to bind to.
+- tool: zernioAnalytics__pauseAd
+  category: Meta analytics & status
+  rest:
+  - https://admakeai.com/api/v1/zernioAnalytics.pauseAd
+  binding: rest
+  confidence: high
+  note: Provider-published 1:1 name mapping; no OpenAPI operationId exists to bind to.
+- tool: zernioAnalytics__resumeAd
+  category: Meta analytics & status
+  rest:
+  - https://admakeai.com/api/v1/zernioAnalytics.resumeAd
+  binding: rest
+  confidence: high
+  note: Provider-published 1:1 name mapping; no OpenAPI operationId exists to bind to.
+- tool: zernioAnalytics__pauseCampaign
+  category: Meta analytics & status
+  rest:
+  - https://admakeai.com/api/v1/zernioAnalytics.pauseCampaign
+  binding: rest
+  confidence: high
+  note: Provider-published 1:1 name mapping; no OpenAPI operationId exists to bind to.
+- tool: zernioAnalytics__resumeCampaign
+  category: Meta analytics & status
+  rest:
+  - https://admakeai.com/api/v1/zernioAnalytics.resumeCampaign
+  binding: rest
+  confidence: high
+  note: Provider-published 1:1 name mapping; no OpenAPI operationId exists to bind to.
+- tool: zernioAnalytics__pauseAdSet
+  category: Meta analytics & status
+  rest:
+  - https://admakeai.com/api/v1/zernioAnalytics.pauseAdSet
+  binding: rest
+  confidence: high
+  note: Provider-published 1:1 name mapping; no OpenAPI operationId exists to bind to.
+- tool: zernioAnalytics__resumeAdSet
+  category: Meta analytics & status
+  rest:
+  - https://admakeai.com/api/v1/zernioAnalytics.resumeAdSet
+  binding: rest
+  confidence: high
+  note: Provider-published 1:1 name mapping; no OpenAPI operationId exists to bind to.
+mcp_only:
+- tool: adResearch__getProject
+  reason: Present in the 65-tool first-party manifest but absent from the provider-served /.well-known/mcp.json discovery
+    card, so an agent doing well-known discovery alone would never see it.
+- tool: adResearch__pollStatus
+  reason: Present in the 65-tool first-party manifest but absent from the provider-served /.well-known/mcp.json discovery
+    card, so an agent doing well-known discovery alone would never see it.
+- tool: project__updateBrief
+  reason: Present in the 65-tool first-party manifest but absent from the provider-served /.well-known/mcp.json discovery
+    card, so an agent doing well-known discovery alone would never see it.
+- tool: project__getAssets
+  reason: Present in the 65-tool first-party manifest but absent from the provider-served /.well-known/mcp.json discovery
+    card, so an agent doing well-known discovery alone would never see it.
+- tool: adGeneration__generateImage
+  reason: Present in the 65-tool first-party manifest but absent from the provider-served /.well-known/mcp.json discovery
+    card, so an agent doing well-known discovery alone would never see it.
+- tool: adGeneration__edit
+  reason: Present in the 65-tool first-party manifest but absent from the provider-served /.well-known/mcp.json discovery
+    card, so an agent doing well-known discovery alone would never see it.
+- tool: adGeneration__toggleFavorite
+  reason: Present in the 65-tool first-party manifest but absent from the provider-served /.well-known/mcp.json discovery
+    card, so an agent doing well-known discovery alone would never see it.
+- tool: adCopyGeneration__generate
+  reason: Present in the 65-tool first-party manifest but absent from the provider-served /.well-known/mcp.json discovery
+    card, so an agent doing well-known discovery alone would never see it.
+- tool: adCopyGeneration__getMessagingStyles
+  reason: Present in the 65-tool first-party manifest but absent from the provider-served /.well-known/mcp.json discovery
+    card, so an agent doing well-known discovery alone would never see it.
+- tool: adSet__create
+  reason: Present in the 65-tool first-party manifest but absent from the provider-served /.well-known/mcp.json discovery
+    card, so an agent doing well-known discovery alone would never see it.
+- tool: adSet__update
+  reason: Present in the 65-tool first-party manifest but absent from the provider-served /.well-known/mcp.json discovery
+    card, so an agent doing well-known discovery alone would never see it.
+- tool: adSet__suggestDirections
+  reason: Present in the 65-tool first-party manifest but absent from the provider-served /.well-known/mcp.json discovery
+    card, so an agent doing well-known discovery alone would never see it.
+- tool: videoGeneration__start
+  reason: Present in the 65-tool first-party manifest but absent from the provider-served /.well-known/mcp.json discovery
+    card, so an agent doing well-known discovery alone would never see it.
+- tool: videoGeneration__getStatus
+  reason: Present in the 65-tool first-party manifest but absent from the provider-served /.well-known/mcp.json discovery
+    card, so an agent doing well-known discovery alone would never see it.
+- tool: videoGeneration__list
+  reason: Present in the 65-tool first-party manifest but absent from the provider-served /.well-known/mcp.json discovery
+    card, so an agent doing well-known discovery alone would never see it.
+- tool: videoGeneration__listPending
+  reason: Present in the 65-tool first-party manifest but absent from the provider-served /.well-known/mcp.json discovery
+    card, so an agent doing well-known discovery alone would never see it.
+- tool: adResearch__searchCompanies
+  reason: Present in the 65-tool first-party manifest but absent from the provider-served /.well-known/mcp.json discovery
+    card, so an agent doing well-known discovery alone would never see it.
+- tool: adResearch__getCompanyAds
+  reason: Present in the 65-tool first-party manifest but absent from the provider-served /.well-known/mcp.json discovery
+    card, so an agent doing well-known discovery alone would never see it.
+- tool: adResearch__addCompetitors
+  reason: Present in the 65-tool first-party manifest but absent from the provider-served /.well-known/mcp.json discovery
+    card, so an agent doing well-known discovery alone would never see it.
+- tool: adResearch__scrapeCompetitor
+  reason: Present in the 65-tool first-party manifest but absent from the provider-served /.well-known/mcp.json discovery
+    card, so an agent doing well-known discovery alone would never see it.
+- tool: adResearch__getCompetitorPreview
+  reason: Present in the 65-tool first-party manifest but absent from the provider-served /.well-known/mcp.json discovery
+    card, so an agent doing well-known discovery alone would never see it.
+- tool: adResearch__getScrapedAds
+  reason: Present in the 65-tool first-party manifest but absent from the provider-served /.well-known/mcp.json discovery
+    card, so an agent doing well-known discovery alone would never see it.
+- tool: adResearch__getAdDetails
+  reason: Present in the 65-tool first-party manifest but absent from the provider-served /.well-known/mcp.json discovery
+    card, so an agent doing well-known discovery alone would never see it.
+- tool: adResearch__saveInspiration
+  reason: Present in the 65-tool first-party manifest but absent from the provider-served /.well-known/mcp.json discovery
+    card, so an agent doing well-known discovery alone would never see it.
+- tool: adResearch__getSavedInspirations
+  reason: Present in the 65-tool first-party manifest but absent from the provider-served /.well-known/mcp.json discovery
+    card, so an agent doing well-known discovery alone would never see it.
+- tool: zernioAnalytics__accountOverview
+  reason: Present in the 65-tool first-party manifest but absent from the provider-served /.well-known/mcp.json discovery
+    card, so an agent doing well-known discovery alone would never see it.
+- tool: zernioAnalytics__getAdComments
+  reason: Present in the 65-tool first-party manifest but absent from the provider-served /.well-known/mcp.json discovery
+    card, so an agent doing well-known discovery alone would never see it.
+rest_only:
+- note: Unknown. Without an OpenAPI or a machine-readable REST index there is no way to enumerate REST procedures that have
+    no MCP tool. The provider states the two surfaces are 1:1, so this list is recorded as unverifiable rather than empty.
+coverage:
+  tools_named: 65
+  tools_bound_to_rest: 65
+  tools_missing_from_server_card: 27
+  rest_operations_total: null
+  rest_operations_with_tool: null
+  note: rest_operations_total is null because no OpenAPI or REST index is published.

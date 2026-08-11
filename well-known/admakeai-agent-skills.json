@@ -1,0 +1,100 @@
+{
+  "$schema": "https://agentskills.io/schema/v1/index.json",
+  "name": "AdMake AI Agent Skills",
+  "description": "Skills that AI agents can perform on behalf of AdMake AI users: generating ad images and UGC video ads, batch-generating ad variations, researching competitor ads in the Meta Ad Library, reading Meta campaign analytics, and drafting Meta campaigns through the official Marketing API. Programmatic access runs through the live MCP server at https://admakeai.com/api/mcp (see https://admakeai.com/.well-known/mcp.json).",
+  "homepage": "https://admakeai.com",
+  "version": "1.0.0",
+  "skills": [
+    {
+      "id": "generate-ad-image",
+      "name": "Generate an ad image",
+      "description": "Generate a Facebook, Instagram, or TikTok ad image from a text prompt and an optional product photo. Available in the web app and programmatically via the adGeneration__create MCP tool. A standard image ad costs 2 credits.",
+      "url": "https://admakeai.com/tools/ad-set/new",
+      "tags": ["ads", "image", "creative", "generation"]
+    },
+    {
+      "id": "generate-ad-set-variations",
+      "name": "Batch-generate ad variations",
+      "description": "Generate a whole set of ad variations from one shared brief plus per-variation instructions, for creative volume testing on Meta. Programmatic access via the adSet__generateBatch MCP tool.",
+      "url": "https://admakeai.com/tools/ad-set",
+      "tags": ["ads", "variations", "batch", "creative-testing"]
+    },
+    {
+      "id": "generate-ugc-video-ad",
+      "name": "Generate a UGC-style video ad",
+      "description": "Create UGC-style vertical video ads with AI avatars, no filming required. 9:16 output for TikTok, Reels, and Meta placements.",
+      "url": "https://admakeai.com/tools/ugc-generator",
+      "tags": ["ugc", "video", "avatar", "tiktok"]
+    },
+    {
+      "id": "research-competitor-ads",
+      "name": "Research competitor ads",
+      "description": "Track competitors' live Meta ads by brand and keyword from the Meta Ad Library, see which formats they keep running, and generate your own ads based on formats that work. Web app feature.",
+      "url": "https://admakeai.com/ad-research",
+      "tags": ["research", "competitors", "meta-ad-library", "tracking"]
+    },
+    {
+      "id": "search-meta-ad-library",
+      "name": "Search the Meta Ad Library",
+      "description": "Search and browse ads currently running in the Meta Ad Library by advertiser or keyword.",
+      "url": "https://admakeai.com/tools/fb-ads-library",
+      "tags": ["research", "meta-ad-library", "search"]
+    },
+    {
+      "id": "generate-ad-copy",
+      "name": "Generate ad copy",
+      "description": "Free AI ad copy generator for headlines, primary text, and CTAs. No account required.",
+      "url": "https://admakeai.com/free-tools/ad-copy-generator",
+      "tags": ["copywriting", "free", "headlines"]
+    },
+    {
+      "id": "resize-meta-ad",
+      "name": "Resize an ad for Meta placements",
+      "description": "Resize one ad image to every Meta placement aspect ratio (feed, story, reels).",
+      "url": "https://admakeai.com/free-tools/meta-ad-resizer",
+      "tags": ["resize", "placements", "aspect-ratio", "free"]
+    },
+    {
+      "id": "chat-with-ai-ad-agent",
+      "name": "Use the AI ad agent",
+      "description": "Chat agent inside AdMake AI that researches competitors, generates creative, and drafts Meta campaigns end to end.",
+      "url": "https://admakeai.com/ai-ad-agent",
+      "tags": ["agent", "chat", "workflow"]
+    },
+    {
+      "id": "draft-meta-campaigns",
+      "name": "Draft and publish Meta campaigns",
+      "description": "Push generated creatives to Meta as draft campaigns, ad sets, and ads through the official Meta Marketing API. Exposed via the facebookUpload and facebookCampaignDraft MCP tools; live actions require explicit user confirmation and delete operations are never exposed.",
+      "url": "https://admakeai.com/agents",
+      "tags": ["meta", "publishing", "campaigns", "marketing-api"]
+    },
+    {
+      "id": "read-meta-ad-analytics",
+      "name": "Read Meta ad analytics",
+      "description": "Read campaign, ad set, and ad level performance metrics (spend, CTR, CPC, conversions) for connected Meta ad accounts via the zernioAnalytics MCP tools.",
+      "url": "https://admakeai.com/agents",
+      "tags": ["analytics", "meta", "reporting"]
+    },
+    {
+      "id": "connect-over-mcp",
+      "name": "Connect an AI agent over MCP",
+      "description": "Connect Claude, ChatGPT, or any MCP client to AdMake AI's live MCP server at https://admakeai.com/api/mcp (Streamable HTTP; API key via x-api-key or Authorization Bearer header, created at /dashboard/integrations/api).",
+      "url": "https://admakeai.com/agents",
+      "tags": ["mcp", "integration", "api"]
+    },
+    {
+      "id": "install-agent-skills",
+      "name": "Install AdMake AI skills for coding agents",
+      "description": "Installable skills for coding agents from the AdMake AI agent-skills repository on GitHub.",
+      "url": "https://github.com/admakeai/agent-skills",
+      "tags": ["skills", "github", "coding-agents"]
+    },
+    {
+      "id": "start-free-account",
+      "name": "Start a free account",
+      "description": "Create a free AdMake AI account with 12 free credits. No credit card required.",
+      "url": "https://admakeai.com/register",
+      "tags": ["signup", "free", "onboarding"]
+    }
+  ]
+}

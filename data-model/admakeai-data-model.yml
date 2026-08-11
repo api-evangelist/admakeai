@@ -1,0 +1,186 @@
+generated: '2026-08-11'
+method: derived
+source: mcp/admakeai-mcp-tools.json (65 provider-published tool inputSchemas)
+note: >-
+  Derived from the id-reference fields and enums in the provider's own tool input schemas — there is no OpenAPI and no
+  object reference page to read, so this graph is reconstructed from what the schemas require, not from a published
+  data dictionary. Cardinalities are inferred from usage (a tool that takes projectId and returns a list implies
+  has_many); fields the schemas do not expose are not invented. The project is the root: 15 of 65 tools require a
+  projectId and the provider instructs agents to resolve one before generating anything.
+entities:
+  - name: Project
+    aka: brand
+    key: projectId
+    description: A brand/product workspace holding the brand brief, assets, competitors, generations and ad sets.
+    fields_seen: [projectId, industry, keywords, productSummary, targetAudience, valueProposition]
+    created_by_agent: false
+    note: Project creation is deliberately not exposed to agents; only project__updateBrief can modify one.
+    tools: [adResearch__listProjects, adResearch__getProject, adResearch__pollStatus, project__updateBrief, project__getAssets]
+  - name: Asset
+    description: Stored product photos and logos belonging to a project.
+    tools: [project__getAssets]
+  - name: UploadedImage
+    key: inputImageId
+    description: A user-uploaded JPEG/PNG/WebP source image, returned with an id and a public URL.
+    tools: [upload__uploadImageBase64, upload__getUserImages]
+  - name: AdGeneration
+    key: id
+    aka: adGenerationId
+    description: One queued or completed ad image render, with a prompt, status and resulting image URLs.
+    fields_seen: [projectId, adSetId, prompt, adType, aspectRatio, quality, inputImageId, referenceAdId, referenceInspirationId,
+      referenceImageUrls, status]
+    status_values: [PENDING, COMPLETED]
+    tools: [adGeneration__create, adGeneration__generateImage, adGeneration__edit, adGeneration__getById, adGeneration__list,
+      adGeneration__getRecent, adGeneration__searchAll, adGeneration__listPending, adGeneration__toggleFavorite]
+  - name: AdSet
+    key: adSetId
+    description: A shared brief plus ad type, quality and aspect ratio from which a batch of variations is generated.
+    fields_seen: [projectId, name, generalInstructions, adType, quality, aspectRatio, adCopyInstructions, adCopyMessagingStyle,
+      additionalImageUrls]
+    tools: [adSet__list, adSet__get, adSet__create, adSet__update, adSet__getGenerations, adSet__generateBatch, adSet__suggestDirections]
+  - name: AdCopy
+    description: Generated headline / primary text / CTA variations for an ad image URL.
+    fields_seen: [imageUrl, projectId, messagingStyle, variationCount, additionalInstructions]
+    messaging_styles: [auto, clickbait, professional, controversial, oneliners, ugc, directResponse, storytelling]
+    tools: [adCopyGeneration__generate, adCopyGeneration__getMessagingStyles]
+  - name: VideoGeneration
+    key: id
+    description: A queued UGC-style video ad render for a project.
+    fields_seen: [projectId, userInstructions, quality, videoCount, referenceImageUrl, startingFrameUrl, generateStartingFrame]
+    tools: [videoGeneration__start, videoGeneration__getStatus, videoGeneration__list, videoGeneration__listPending]
+  - name: Competitor
+    key: competitorId
+    description: A tracked competitor brand attached to a project, resolved to a Facebook advertiser Page.
+    fields_seen: [projectId, name, type, pageId]
+    type_values: [DIRECT, INDIRECT, ASPIRATIONAL]
+    tools: [adResearch__searchCompanies, adResearch__addCompetitors, adResearch__scrapeCompetitor, adResearch__getCompetitorPreview]
+  - name: ScrapedAd
+    key: scrapedAdId
+    description: A competitor ad harvested from the Meta Ad Library into a project.
+    fields_seen: [projectId, competitorId, mediaType, sortBy, searchTerm]
+    media_types: [IMAGE, VIDEO, CAROUSEL, ALL]
+    tools: [adResearch__getScrapedAds, adResearch__getAdDetails, adResearch__getCompanyAds]
+  - name: Inspiration
+    key: referenceInspirationId
+    description: A scraped competitor ad saved onto a project as creative reference.
+    tools: [adResearch__saveInspiration, adResearch__getSavedInspirations]
+  - name: FacebookConnection
+    key: connectionId
+    description: A connected Meta identity granting access to ad accounts and Pages.
+    fields_seen: [connectionId, adAccountId, pageId]
+    tools: [facebookConnection__list]
+  - name: MetaAdAccount
+    key: adAccountId
+    tools: [facebookUpload__getCampaigns, zernioAnalytics__accountOverview, zernioAnalytics__tree, zernioAnalytics__timeline]
+  - name: MetaCampaign
+    key: campaignId
+    tools: [facebookUpload__getCampaigns, facebookUpload__getAdSets, zernioAnalytics__listCampaigns, zernioAnalytics__pauseCampaign,
+      zernioAnalytics__resumeCampaign]
+  - name: MetaAdSet
+    key: targetAdSetId
+    tools: [facebookUpload__getAdSets, zernioAnalytics__pauseAdSet, zernioAnalytics__resumeAdSet]
+  - name: MetaAd
+    key: adId
+    tools: [zernioAnalytics__listAds, zernioAnalytics__getAd, zernioAnalytics__getAdAnalytics, zernioAnalytics__getAdComments,
+      zernioAnalytics__pauseAd, zernioAnalytics__resumeAd]
+  - name: Upload
+    key: uploadedAdId
+    description: A request to push one AdMakeAI generation to a Meta ad account, with a state and resulting Meta IDs.
+    fields_seen: [adGenerationId, targetAdSetId, targetPageId, targetInstagramActorId, copy, destinationUrl]
+    tools: [facebookUpload__runPreflight, facebookUpload__request, facebookUpload__list, facebookUpload__get]
+  - name: CampaignDraft
+    key: draftId
+    description: An agent-authored Meta campaign draft (campaign + ad sets + ads) held before being pushed live.
+    fields_seen: [connectionId, adAccountId, pageId, campaign, adSets]
+    tools: [facebookCampaignDraft__sourceAssets, facebookCampaignDraft__getAgentDraft, facebookCampaignDraft__pushAgentDraft,
+      facebookCampaignDraft__pushDraftCampaign]
+relationships:
+  - from: Project
+    to: AdSet
+    type: has_many
+    via: projectId
+  - from: Project
+    to: AdGeneration
+    type: has_many
+    via: projectId
+  - from: Project
+    to: VideoGeneration
+    type: has_many
+    via: projectId
+  - from: Project
+    to: Competitor
+    type: has_many
+    via: projectId
+  - from: Project
+    to: Asset
+    type: has_many
+    via: projectId
+  - from: Project
+    to: Inspiration
+    type: has_many
+    via: projectId
+  - from: AdSet
+    to: AdGeneration
+    type: has_many
+    via: adSetId
+  - from: AdGeneration
+    to: UploadedImage
+    type: has_one
+    via: inputImageId
+  - from: AdGeneration
+    to: Inspiration
+    type: has_one
+    via: referenceInspirationId
+  - from: AdGeneration
+    to: AdGeneration
+    type: has_one
+    via: referenceAdId
+    note: Self-reference — a generation can cite an earlier generation as its reference.
+  - from: Competitor
+    to: ScrapedAd
+    type: has_many
+    via: competitorId
+  - from: ScrapedAd
+    to: Inspiration
+    type: has_one
+    via: scrapedAdId
+  - from: FacebookConnection
+    to: MetaAdAccount
+    type: has_many
+    via: adAccountId
+  - from: MetaAdAccount
+    to: MetaCampaign
+    type: has_many
+    via: adAccountId
+  - from: MetaCampaign
+    to: MetaAdSet
+    type: has_many
+    via: campaignId
+  - from: MetaAdSet
+    to: MetaAd
+    type: has_many
+    via: adSetId
+  - from: Upload
+    to: AdGeneration
+    type: belongs_to
+    via: adGenerationId
+  - from: Upload
+    to: MetaAdSet
+    type: belongs_to
+    via: targetAdSetId
+  - from: CampaignDraft
+    to: FacebookConnection
+    type: belongs_to
+    via: connectionId
+  - from: CampaignDraft
+    to: MetaAdAccount
+    type: belongs_to
+    via: adAccountId
+id_prefixes:
+  documented: false
+  note: No id prefix scheme is published; ids are opaque strings in every schema.
+boundary:
+  note: >-
+    The graph has two halves that meet only at Upload and CampaignDraft — AdMakeAI-owned objects (Project, AdSet,
+    AdGeneration, VideoGeneration, Competitor, ScrapedAd) and Meta-owned objects (ad account, campaign, ad set, ad)
+    reached through the Meta Marketing API. Only the Meta half carries live spend consequences.

@@ -1,0 +1,74 @@
+generated: '2026-08-11'
+method: searched
+source: registry.npmjs.org (search + direct lookups), pypi.org, api.github.com, https://admakeai.com/llms.txt
+note: >-
+  AdMakeAI ships NO client SDK in any package registry. npm returns zero results for "admakeai" and direct lookups of
+  admakeai, admake-ai, @admakeai/mcp and @admakeai/sdk all 404; PyPI 404s; no Maven, NuGet, Go module, RubyGems,
+  Packagist or crates.io package exists. What it does distribute are three agent-side artifacts on GitHub — none of
+  them a client library. No SDKs pointer is emitted in apis.yml for that reason: there is no SDK to count.
+sdk_count: 0
+packages:
+  - language: markdown
+    registry: github
+    name: admakeai-agent-skills
+    url: https://github.com/mesmerlord/admakeai-agent-skills
+    install: npx skills add admakeai/agent-skills
+    official: true
+    version: null
+    published: '2026-05-24'
+    published_source: GitHub repository pushed_at (no tags, no releases)
+    license: MIT
+    note: >-
+      DEFECT — the install command the provider publishes does not resolve. `npx skills add admakeai/agent-skills`
+      resolves owner/repo on GitHub, but github.com/admakeai returns 404: the admakeai organization does not exist and
+      the repository actually lives under the personal account github.com/mesmerlord. The same dead URL is published in
+      /llms.txt ("Agent skills repository") and in /.well-known/mcp.json (capabilities.discovery.skillRepository).
+      Unversioned: the repo carries no tags and no releases, so a consumer cannot pin what they install.
+  - language: json
+    registry: github
+    name: admakeai-claude-plugin
+    url: https://github.com/mesmerlord/admakeai-claude-plugin
+    install: Claude Code plugin (.claude-plugin/plugin.json)
+    official: true
+    version: 1.0.0
+    version_source: .claude-plugin/plugin.json
+    published: '2026-08-11'
+    published_source: GitHub repository pushed_at (no tags, no releases)
+    license: MIT
+    note: Thin wrapper — it contains only a plugin manifest and an .mcp.json pointing at the hosted server.
+  - language: json
+    registry: github
+    name: admakeai-mcp
+    url: https://github.com/mesmerlord/admakeai-mcp
+    install: 'Remote MCP server config: {"mcpServers":{"admakeai":{"type":"http","url":"https://admakeai.com/api/mcp"}}}'
+    official: true
+    version: 1.0.0
+    version_source: lhm.plugin.json
+    published: '2026-08-11'
+    published_source: GitHub repository pushed_at (no tags, no releases)
+    license: MIT
+    note: >-
+      Carries lhm.plugin.json, the only published document containing the full 65-tool list WITH inputSchema. Saved
+      verbatim to mcp/admakeai-mcp-tools.json.
+registries_checked:
+  - registry: npm
+    result: absent
+    evidence: 'registry.npmjs.org/-/v1/search?text=admakeai returned total 0; @admakeai/* and admakeai* 404'
+  - registry: pypi
+    result: absent
+    evidence: pypi.org/pypi/admakeai/json returned 404
+  - registry: maven-central
+    result: absent
+  - registry: nuget
+    result: absent
+  - registry: pkg.go.dev
+    result: absent
+  - registry: rubygems
+    result: absent
+  - registry: packagist
+    result: absent
+  - registry: crates.io
+    result: absent
+  - registry: mcp-registry
+    result: present
+    evidence: 'registry.modelcontextprotocol.io/v0/servers?search=admakeai returned com.admakeai/admakeai, status active, published 2026-08-11'

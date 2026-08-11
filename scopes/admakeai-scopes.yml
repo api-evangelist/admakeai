@@ -1,0 +1,49 @@
+generated: '2026-08-11'
+method: searched
+source: https://admakeai.com/.well-known/oauth-authorization-server (probed 2026-08-11, HTTP 200)
+docs: https://github.com/mesmerlord/admakeai-mcp#permissions
+note: >-
+  No OpenAPI exists to derive from, so this is read from the provider's live RFC 8414 authorization-server metadata and
+  the scope descriptions the provider publishes in its own MCP server card and MCP README. Three functional scopes plus
+  offline_access; scope is filtered at tools/list, so a narrower grant removes the tools entirely rather than failing
+  them at call time.
+schemes:
+  - name: oauth2
+    issuer: https://admakeai.com
+    source: https://admakeai.com/.well-known/oauth-authorization-server
+    flows:
+      - flow: authorizationCode
+        authorizationUrl: https://admakeai.com/oauth/authorize
+        tokenUrl: https://admakeai.com/api/oauth/token
+        code_challenge_methods: [S256]
+scopes:
+  - scope: mcp:read
+    consent_label: Read your account
+    description: >-
+      Read the account, projects, generated ads, competitor research results, and Facebook/Meta ad performance.
+    covers: [projects, generations, research results, analytics]
+    flows: [authorizationCode]
+    tools: 40
+  - scope: mcp:write
+    consent_label: Create ads and drafts
+    description: >-
+      Generate ads, upload images, write ad copy, and prepare campaign drafts. Spends plan credits.
+    covers: [image generation, video generation, ad copy, ad sets, campaign drafts]
+    flows: [authorizationCode]
+    tools: 16
+  - scope: mcp:publish
+    consent_label: Manage live Facebook ads
+    description: >-
+      Push drafts live and pause or resume running Facebook campaigns, ad sets, and ads.
+    covers: [live Meta status changes, publishing drafts]
+    flows: [authorizationCode]
+    tools: 9
+    note: Six of the nine pause/resume tools in this class are currently disabled and fail closed.
+  - scope: offline_access
+    description: Issue a rotating refresh token.
+    flows: [authorizationCode]
+enforcement:
+  point: tools/list
+  detail: A connection approved without mcp:publish cannot even list the live-action tools.
+  revocation: https://admakeai.com/api/oauth/revoke
+  source: https://admakeai.com/.well-known/mcp.json
