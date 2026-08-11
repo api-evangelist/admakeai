@@ -1,0 +1,97 @@
+name: AdMakeAI
+description: >-
+  AI ad-creative platform for Meta, Instagram, and TikTok that turns product photos or prompts into finished ad images
+  and UGC-style video ads, batch-generates ad-set variations, researches competitor ads, reads Meta campaign analytics,
+  and drafts campaigns into Meta Ads Manager. Exposes a REST/JSON API, a hosted MCP server (59 tools), and a published
+  agent skill, all bound to one account/credit pool.
+url: https://admakeai.apievangelist.com/apis.yml
+created: '2026-08-11'
+modified: '2026-08-11'
+specificationVersion: '0.21'
+tags:
+  - Advertising
+  - Marketing
+  - AdTech
+  - Generative AI
+  - Image Generation
+  - Video Generation
+  - Meta Ads
+  - Competitive Intelligence
+  - MCP
+  - Agents
+  - Agent Skills
+apis:
+  - name: AdMakeAI REST API
+    description: >-
+      RPC-style JSON REST API with dot-named methods (e.g. adGeneration.list) covering ad image generation, batch ad
+      sets, Meta analytics (read-only), and Meta campaign draft publishing. Authenticated via x-api-key header.
+    humanURL: https://admakeai.com/agents
+    baseURL: https://admakeai.com/api/v1
+    tags:
+      - Advertising
+      - Marketing
+      - AdTech
+      - Generative AI
+      - Image Generation
+      - Video Generation
+      - Meta Ads
+      - Competitive Intelligence
+      - MCP
+      - Agents
+      - Agent Skills
+    properties:
+      - type: Documentation
+        url: https://admakeai.com/api/docs
+  - name: AdMakeAI MCP Server
+    description: >-
+      Hosted, stateless JSON-RPC-over-HTTP MCP server exposing 59 tools for ad generation, batch ad sets, Meta
+      analytics, and Meta draft publishing. Works with Claude Code/Desktop/web, Cursor, VS Code/Copilot, Windsurf,
+      Codex, Gemini CLI, and Cline. Authenticated via x-api-key header.
+    humanURL: https://admakeai.com/agents
+    baseURL: https://admakeai.com/api/mcp
+    tags:
+      - Advertising
+      - Marketing
+      - AdTech
+      - Generative AI
+      - Image Generation
+      - Video Generation
+      - Meta Ads
+      - Competitive Intelligence
+      - MCP
+      - Agents
+      - Agent Skills
+    properties:
+      - type: MCPServer
+        url: https://admakeai.com/api/mcp
+      - type: Documentation
+        url: https://admakeai.com/agents
+  - name: AdMakeAI Agent Skill
+    description: >-
+      Published SKILL.md that teaches an agent tool selection, credit mechanics, and prompt patterns. Installed via 'npx
+      skills add admakeai/agent-skills'.
+    humanURL: https://admakeai.com/agents
+    baseURL: https://admakeai.com/agents
+    tags:
+      - Advertising
+      - Marketing
+      - AdTech
+      - Generative AI
+      - Image Generation
+      - Video Generation
+      - Meta Ads
+      - Competitive Intelligence
+      - MCP
+      - Agents
+      - Agent Skills
+    properties:
+      - type: AgentSkill
+        url: https://admakeai.com/agents
+maintainers:
+  - FN: AdMakeAI
+    url: https://admakeai.com/
+generated:
+  by: apis.io/add
+  model: claude-opus-4-8
+  confidence: 90
+  at: '2026-08-11T12:03:43.826Z'
