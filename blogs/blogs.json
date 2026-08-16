@@ -1,0 +1,14 @@
+{
+  "repo": "admakeai",
+  "feeds": [
+    {
+      "source": "https://admakeai.com/resources/faq",
+      "feed_url": "https://admakeai.com/resources/faq",
+      "title": "",
+      "saved": 0,
+      "method": "none"
+    }
+  ],
+  "post_count": 0,
+  "fetched": "2026-08-15T12:22:01Z"
+}
