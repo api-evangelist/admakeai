@@ -9,7 +9,7 @@ description: >-
   S256) with three scopes filtered at tools/list, publishes an llms.txt, an MCP server card and an agent-skills index
   under /.well-known/, and ships a first-party Agent Skill for coding agents.
 image: https://admakeai.com/apple-touch-icon.png
-url: https://admakeai.apievangelist.com/apis.yml
+url: https://raw.githubusercontent.com/api-evangelist/admakeai/refs/heads/main/apis.yml
 created: '2026-08-11'
 modified: '2026-08-11'
 specificationVersion: '0.21'
