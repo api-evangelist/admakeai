@@ -12,7 +12,7 @@ image: https://admakeai.com/apple-touch-icon.png
 url: https://raw.githubusercontent.com/api-evangelist/admakeai/refs/heads/main/apis.yml
 created: '2026-08-11'
 modified: '2026-08-11'
-specificationVersion: '0.21'
+specificationVersion: '0.23'
 tags:
   - Advertising
   - Marketing
