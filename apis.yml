@@ -18,6 +18,18 @@ tags:
   - Marketing
   - AdTech
   - Generative AI
+  - Image-Generation
+  - Video Generation
+  - Meta Ads
+  - Competitive Intelligence
+  - MCP
+  - Agents
+  - Agent Skills
+tags_raw:
+  - Advertising
+  - Marketing
+  - AdTech
+  - Generative AI
   - Image Generation
   - Video Generation
   - Meta Ads
@@ -36,6 +48,18 @@ apis:
     humanURL: https://admakeai.com/agents
     baseURL: https://admakeai.com/api/v1
     tags:
+      - Advertising
+      - Marketing
+      - AdTech
+      - Generative AI
+      - Image-Generation
+      - Video Generation
+      - Meta Ads
+      - Competitive Intelligence
+      - MCP
+      - Agents
+      - Agent Skills
+    tags_raw:
       - Advertising
       - Marketing
       - AdTech
@@ -75,6 +99,18 @@ apis:
       - Marketing
       - AdTech
       - Generative AI
+      - Image-Generation
+      - Video Generation
+      - Meta Ads
+      - Competitive Intelligence
+      - MCP
+      - Agents
+      - Agent Skills
+    tags_raw:
+      - Advertising
+      - Marketing
+      - AdTech
+      - Generative AI
       - Image Generation
       - Video Generation
       - Meta Ads
@@ -104,6 +140,18 @@ apis:
     humanURL: https://admakeai.com/agents
     baseURL: https://admakeai.com/agents
     tags:
+      - Advertising
+      - Marketing
+      - AdTech
+      - Generative AI
+      - Image-Generation
+      - Video Generation
+      - Meta Ads
+      - Competitive Intelligence
+      - MCP
+      - Agents
+      - Agent Skills
+    tags_raw:
       - Advertising
       - Marketing
       - AdTech
