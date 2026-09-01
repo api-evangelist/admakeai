@@ -183,6 +183,9 @@ apis:
       - type: SourceCode
         url: https://github.com/mesmerlord/admakeai-agent-skills
 common:
+  - type: License
+    name: MIT
+    url: https://github.com/mesmerlord/admakeai-agent-skills/blob/main/LICENSE
   - type: WellKnown
     url: well-known/admakeai-well-known.yml
   - type: LLMsTxt
