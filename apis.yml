@@ -199,6 +199,8 @@ apis:
       - type: SourceCode
         url: https://github.com/mesmerlord/admakeai-agent-skills
 common:
+  - type: Website
+    url: https://www.admakeai.com/
   - type: License
     name: MIT
     url: https://github.com/mesmerlord/admakeai-agent-skills/blob/main/LICENSE
