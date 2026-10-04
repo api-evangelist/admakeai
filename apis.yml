@@ -46,7 +46,7 @@ tags:
   - Marketing
   - AdTech
   - Generative AI
-  - Image-Generation
+  - Image Generation
   - Video Generation
   - Meta Ads
   - Competitive Intelligence
@@ -65,6 +65,7 @@ tags_raw:
   - MCP
   - Agents
   - Agent Skills
+  - Image-Generation
 apis:
   - name: AdMakeAI REST API
     description: >-
@@ -80,7 +81,7 @@ apis:
       - Marketing
       - AdTech
       - Generative AI
-      - Image-Generation
+      - Image Generation
       - Video Generation
       - Meta Ads
       - Competitive Intelligence
@@ -99,6 +100,7 @@ apis:
       - MCP
       - Agents
       - Agent Skills
+      - Image-Generation
     properties:
       - type: Documentation
         url: https://admakeai.com/api/docs
@@ -127,7 +129,7 @@ apis:
       - Marketing
       - AdTech
       - Generative AI
-      - Image-Generation
+      - Image Generation
       - Video Generation
       - Meta Ads
       - Competitive Intelligence
@@ -146,6 +148,7 @@ apis:
       - MCP
       - Agents
       - Agent Skills
+      - Image-Generation
     properties:
       - type: MCPServer
         url: https://admakeai.com/api/mcp
@@ -172,7 +175,7 @@ apis:
       - Marketing
       - AdTech
       - Generative AI
-      - Image-Generation
+      - Image Generation
       - Video Generation
       - Meta Ads
       - Competitive Intelligence
@@ -191,6 +194,7 @@ apis:
       - MCP
       - Agents
       - Agent Skills
+      - Image-Generation
     properties:
       - type: AgentSkill
         url: https://admakeai.com/agents
