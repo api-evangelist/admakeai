@@ -92,32 +92,39 @@ Model Context Protocol servers that expose the API to agents.
 
 Which operations an agent can call, which act, and which need a human in the loop.
 
-- [Admakeai Agentic Access](https://apis.io/agentic-access/admakeai/admakeai-agentic-access/)
+- [AdMakeAI Agentic Access](https://apis.io/agentic-access/admakeai/admakeai-agentic-access/)
 
 #### Security (2)
 
 Authentication, trust centre, and vulnerability disclosure.
 
-- [Admakeai Authentication](https://apis.io/security/admakeai/admakeai-authentication/)
-- [Admakeai Domain Security](https://apis.io/security/admakeai/admakeai-domain-security/)
+- [AdMakeAI Authentication](https://apis.io/security/admakeai/admakeai-authentication/)
+- [AdMakeAI Domain Security](https://apis.io/security/admakeai/admakeai-domain-security/)
 
 #### OAuth scopes (1)
 
 The permissions the API asks for.
 
-- [Admakeai Scopes](https://apis.io/scopes/admakeai/admakeai-scopes/)
+- [AdMakeAI Scopes](https://apis.io/scopes/admakeai/admakeai-scopes/)
 
-#### Plans and pricing (1)
+#### Plans and pricing (2)
 
 Published plans, tiers and prices.
 
-- [Admakeai Plans Pricing](https://apis.io/plans/admakeai/admakeai-plans-pricing/)
+- [AdMakeAI Plans Pricing](https://apis.io/plans/admakeai/admakeai-plans-pricing/)
+- [AdMakeAI Price Estimates](https://apis.io/plans/admakeai/admakeai-price-estimates/)
 
 #### Rate limits (1)
 
 Published request limits.
 
-- [Admakeai Rate Limits](https://apis.io/rate-limits/admakeai/admakeai-rate-limits/)
+- [AdMakeAI Rate Limits](https://apis.io/rate-limits/admakeai/admakeai-rate-limits/)
+
+#### FinOps (1)
+
+What the API costs to run, by operation.
+
+- [AdMakeAI Finops](https://apis.io/finops/admakeai/admakeai-finops/)
 
 ## Where to find this API
 
@@ -136,18 +143,18 @@ Links to the company's own pages. This repository publishes no copy of their spe
 
 ## API Evangelist rating
 
-**Kin Score 43.8** — developing · rubric 0.25.0 · scored 2026-10-23
+**Kin Score 44.0** — developing · rubric 0.28.1 · scored 2026-11-21
 
 | Facet | Score |
 |---|---|
 | Discoverability | 80.0 |
 | Contract quality | 0.0 |
 | Contract governance | 18.2 |
-| Operational transparency | 26.3 |
+| Operational transparency | 23.8 |
 | Developer ergonomics | 64.3 |
-| Access clarity | 76.3 |
+| Access clarity | 83.0 |
 
-**Agent readiness 38.1** — agent-ready
+**Agent readiness 37.8** — agent-ready
 
 | Agent-readiness dimension | Result |
 |---|---|
@@ -172,8 +179,12 @@ Links to the company's own pages. This repository publishes no copy of their spe
 | Agentic Commerce | — |
 | Pagination Ratio | na |
 | Operation Distinctiveness | na |
+| MCP Tool Quality | na |
+| Onboarding Descriptor | — |
+| Dns Aid Index | na |
+| Markdown Negotiation | yes |
 
-**Regulatory alignment 31.8** — AI & Biometrics
+**Regulatory alignment 26.4** — AI & Biometrics
 
 The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/admakeai/](https://apis.io/providers/admakeai/).
 
